@@ -1,0 +1,57 @@
+seed        A delay  down     B25 delay  down     B50 delay  down     B75 delay  down
+ 101          29436  2040         35829  2042         39544  2042         37589  2043
+ 102         117757  2045         96810  2095         89761  2112         93817  2097
+ 103          45029  2023         42899  2023         40245  2021         41540  2023
+ 104          28120  2037         28013  2038         29608  2040         27093  2042
+ 105          58313  2129         59514  2133         60911  2131         64667  2126
+ 106          36978  2095         42729  2097         39352  2095         38367  2095
+ 107          62840  2097         55970  2117         60611  2112         54573  2115
+ 108          27779  2083         30733  2085         32080  2083         28497  2085
+ 109          59973  2071         48427  2109         44414  2103         40395  2098
+ 110          52526  2069         46557  2100         47017  2091         45651  2088
+ 111          76947  2126         83145  2127         76888  2134         82785  2121
+ 112          39454  2115         45125  2114         46554  2110         40486  2110
+ 113          79993  2076         51457  2126         46794  2119         40049  2109
+ 114          62582  2157         65367  2148         74741  2131         74795  2115
+ 115          32481  2103         36954  2102         41664  2095         35088  2093
+ 116          41448  2057         46537  2071         43414  2071         46468  2067
+ 117          28613  2069         29990  2071         31870  2064         31064  2052
+ 118          85244  2121         89342  2129         87491  2133         83771  2127
+ 119          52856  2090         52902  2081         50613  2086         48270  2081
+ 120          51365  2100         53626  2093         57656  2078         54108  2073
+{
+ "B25": {
+  "accumulated_delay_veh_s": -1390.485,
+  "total_delay_main_veh_s": 7795.455,
+  "total_delay_ramp_veh_s": -9185.94,
+  "downstream_flow_veh_h": 9.857,
+  "discharge_flow_active_veh_h": 58.613,
+  "disturbance_ratio": 0.444,
+  "far_upstream_speed_sd_kmh": 7.3,
+  "congestion_duration_s": 46.5,
+  "stops_at_lane_end": -1.0
+ },
+ "B50": {
+  "accumulated_delay_veh_s": -1425.402,
+  "total_delay_main_veh_s": 12010.005,
+  "total_delay_ramp_veh_s": -13435.407,
+  "downstream_flow_veh_h": 7.457,
+  "discharge_flow_active_veh_h": 124.113,
+  "disturbance_ratio": 0.679,
+  "far_upstream_speed_sd_kmh": 8.574,
+  "congestion_duration_s": -162.0,
+  "stops_at_lane_end": -3.5
+ },
+ "B75": {
+  "accumulated_delay_veh_s": -3032.94,
+  "total_delay_main_veh_s": 11761.043,
+  "total_delay_ramp_veh_s": -14793.983,
+  "downstream_flow_veh_h": 2.914,
+  "discharge_flow_active_veh_h": 105.127,
+  "disturbance_ratio": 0.543,
+  "far_upstream_speed_sd_kmh": 5.158,
+  "congestion_duration_s": -238.5,
+  "stops_at_lane_end": -3.8
+ }
+}
+Saved comparison.json

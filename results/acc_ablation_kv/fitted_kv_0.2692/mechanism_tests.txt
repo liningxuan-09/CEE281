@@ -1,0 +1,10 @@
+ACC: kp=0.0131 kv=0.2692 eta=7.5699 h=1.27; takeover above 2.0 m/s^2
+
+1. Platoon disturbance (speed drop in m/s; leader drops 10 m/s)
+   all HDV              follower 5:   9.9  10:   9.5  20:   8.1  40:   5.4  | min gap  20.4 m, takeovers 0
+   25% ACC (every 4th)  follower 5:  10.1  10:   9.9  20:   9.6  40:   9.1  | min gap  20.4 m, takeovers 10
+   100% ACC             follower 5:  10.8  10:  11.5  20:  12.9  40:  16.2  | min gap  13.2 m, takeovers 40
+
+2. Queue discharge from standstill (veh/h past 300 m)
+   Gunter eta, h=1.27 s all HDV:  2089  25% ACC (every 4th):  1743  100% ACC:  1147
+   eta=2 m, h=1.2 s     all HDV:  2089  25% ACC (every 4th):  1790  100% ACC:  1219

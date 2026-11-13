@@ -1,0 +1,26 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.DS_Store
+
+# Results: the 20-seed comparisons, figures and demonstration pages are kept.
+# Large regenerable files are not (run_demo.py --save --gif recreates them):
+results/dev_history/
+results/**/*.gif
+results/**/*_raw.json
+results/**/*_trajectories.csv
+
+# LaTeX build files (the PDF is kept)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Not part of the repository
+report/
+proposal/

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+/* Offline report: present.py fills the double-brace placeholders; no network access needed. */
+:root {
+  --page: #f4f3ef; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --accent: #2a78d6; --border: rgba(11,11,11,0.10);
+}
+* { box-sizing: border-box; }
+html { background: var(--page); }
+body { margin: 0; background: var(--page); color: var(--ink);
+       font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+main { max-width: 1240px; margin: 0 auto; padding: 28px 16px 64px; }
+header h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+header .run { color: var(--ink-2); margin: 0; font-variant-numeric: tabular-nums; }
+p.caveat { color: var(--muted); font-size: 12.5px; margin: 18px 0 0; }
+details.more { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin: 16px 0; }
+details.more > summary { cursor: pointer; padding: 16px 22px; font-weight: 600; color: var(--ink-2); list-style-position: inside; }
+details.more[open] > summary { border-bottom: 1px solid var(--grid); }
+.more-body { padding: 6px 22px 22px; }
+.more-body h2 { font-size: 16px; margin: 22px 0 8px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0 0 14px; color: var(--ink-2); font-size: 14px; }
+.facts b { color: var(--ink); font-weight: 600; }
+nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 8px; }
+nav a { color: var(--ink-2); text-decoration: none; font-size: 13px; padding: 5px 10px;
+        border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+nav a:hover { color: var(--ink); border-color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 20px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.kpi-label { color: var(--ink-2); font-size: 12.5px; }
+.kpi-value { font-size: 28px; font-weight: 650; margin: 2px 0; font-variant-numeric: tabular-nums; }
+.kpi-note { color: var(--muted); font-size: 12px; }
+section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+          padding: 20px 22px; margin: 16px 0; scroll-margin-top: 12px; }
+section h2 { font-size: 19px; margin: 0 0 4px; }
+section > p.lead { color: var(--ink-2); margin: 0 0 14px; max-width: 900px; }
+.controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+button, select { font: inherit; font-size: 14px; padding: 7px 12px; border-radius: 8px;
+                 border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; min-width: 84px; }
+input[type=range] { flex: 1 1 240px; accent-color: var(--accent); }
+#clock { font-variant-numeric: tabular-nums; color: var(--ink-2); min-width: 64px; }
+canvas { width: 100%; display: block; border-radius: 10px; background: var(--surface); }
+.hint { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+figure { margin: 0; }
+figure img { width: 100%; display: block; border-radius: 8px; }
+figcaption { color: var(--ink-2); font-size: 13.5px; margin-top: 8px; max-width: 980px; }
+figcaption b { color: var(--ink); }
+.stack { display: grid; gap: 26px; }
+figure.spaced { margin-top: 26px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px 24px; }
+.group h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 6px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 6px 0; border-bottom: 1px solid var(--grid); text-align: left; vertical-align: top; }
+th { font-weight: 450; color: var(--ink-2); padding-right: 12px; }
+td { text-align: right; font-variant-numeric: tabular-nums; }
+code { font-size: 12.5px; }
+table.wide th { font-weight: 600; color: var(--ink-2); font-size: 12.5px; }
+table.wide td, table.wide th { padding: 6px 10px 6px 0; text-align: left; }
+h3.sub { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 18px 0 6px; }
+ul.notes { color: var(--ink-2); padding-left: 20px; margin: 0; }
+ul.notes li { margin: 4px 0; }
+@media (max-width: 640px) { header h1 { font-size: 22px; } section { padding: 16px; } .kpi-value { font-size: 22px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>{{TITLE}}</h1>
+  <p class="run">{{RUN_LABEL}}</p>
+</header>
+
+<div class="kpis">{{KPIS}}</div>
+
+<section id="replay">
+  <h2>Vehicle replay</h2>
+  <div class="controls">
+    <button id="play" class="primary">Play</button>
+    <button id="back" title="Back 10 s (left arrow)">−10 s</button>
+    <button id="fwd" title="Forward 10 s (right arrow)">+10 s</button>
+    <select id="speed" aria-label="Playback speed">
+      <option value="5">5×</option><option value="10">10×</option><option value="20" selected>20×</option>
+      <option value="40">40×</option><option value="80">80×</option>
+    </select>
+    <input id="time" type="range" min="0" max="1" value="0" aria-label="Simulation time">
+    <span id="clock"></span>
+  </div>
+  <canvas id="road" aria-label="Replay of vehicle positions"></canvas>
+  <p class="hint">Space = play/pause, ← → = 10 s. Top strip: whole corridor; large view: merge area. Dark outline = vehicle from the ramp.{{ACC_HINT}}</p>
+</section>
+
+{{MAIN_SECTIONS}}
+
+<details class="more">
+  <summary>More figures and full tables</summary>
+  <div class="more-body">{{DETAILS}}</div>
+</details>
+
+<p class="caveat">{{CAVEAT}}</p>
+</main>
+<script>
+// Data embedded by present.py; the page makes no network requests.
+const DATA = {{DATA}};
+const CONFIGS = {{CONFIGS}};
+const COUNTERS = {{COUNTERS}};
+const SPEED_STOPS = {{SPEED_STOPS}};
+const RAMP = {{RAMP}};
+const TMC = {{TMC}};
+const ACC = new Set({{ACC}});
+{{REPLAY_SCRIPT}}
+</script>
+</body>
+</html>

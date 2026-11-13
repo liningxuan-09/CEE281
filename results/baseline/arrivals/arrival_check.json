@@ -1,0 +1,42 @@
+{
+ "seeds": [
+  101,
+  120
+ ],
+ "mainline": {
+  "target_veh_h": 1700.0,
+  "expected_vehicles": 1133.3333333333333,
+  "generated_mean": 1148.75,
+  "headway_mean_s": 2.0876596506919407,
+  "target_headway_s": 2.1176470588235294,
+  "ks": [
+   0.007538447711276874,
+   0.14654999763545298
+  ],
+  "counts30_mean": 14.359375,
+  "counts30_var": 14.152724609375,
+  "dispersion": 0.9856086779107726
+ },
+ "ramp_peak": {
+  "target_veh_h": 450.0,
+  "expected_vehicles": 233.33333333333334,
+  "generated_mean": 234.4,
+  "headway_mean_s": 7.904907986158026,
+  "target_headway_s": 8.0,
+  "ks": [
+   0.011324214001697641,
+   0.605526757667911
+  ],
+  "counts30_mean": 3.785,
+  "counts30_var": 3.737108333333333,
+  "dispersion": 0.9873469837076176
+ },
+ "seed9_check": {
+  "mainline_arrivals_match_saved_run": true,
+  "mainline_vehicles": 1168,
+  "ramp_vehicles": 224,
+  "entry_wait_mean_s": 3.356501862491167,
+  "entry_wait_max_s": 17.65715306703919,
+  "share_waiting_over_1s": 0.675513698630137
+ }
+}

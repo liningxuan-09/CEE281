@@ -1,0 +1,82 @@
+seed                A delay strand        A-ALINEA delay strand  A-ALINEA-fault delay strand  A-ALINEA-miss2 delay strand A-ALINEA-noise2 delay strandA-ALINEA-delay30 delay strand
+ 101                  29436      0                 37154      0                 47015      0                 33225      0                 42517      0                 43805      3
+ 102                 117757     10                102958     10                143152      9                 97269      3                 93752      0                104399      0
+ 103                  45029      4                 49055      0                 55698      0                 50828      0                 54844      9                 51162      6
+ 104                  28120      0                 30886      3                 33706      0                 29732      0                 29873      0                 30238      0
+ 105                  58313      5                 65178      0                 55860      0                 61879      6                 75249      0                 71481      6
+ 106                  36978      0                 41305      0                 37577      0                 37804      0                 41463      0                 43855      3
+ 107                  62840      6                 57671      3                 58844      7                 57063      3                 53896      0                 58889      3
+ 108                  27779      0                 31201      0                 33883      0                 31463      0                 33788      0                 35266      3
+ 109                  59973      7                 60977      4                 52003      4                 48048      3                 56224      6                 63926      8
+ 110                  52526      4                 50020      0                 53445      0                 53351      5                 56541      0                 65819      0
+ 111                  76947      7                 82249      0                 83142      4                 85899      3                 84079      0                 88688      0
+ 112                  39454      0                 52832      4                 47372      0                 47071      0                 51889      0                 62199      6
+ 113                  79993     11                 73693      7                 65928      4                 66912      3                 73764     10                 73015      6
+ 114                  62582      0                 67447      3                 65220      0                 69809      0                 63880      3                 71636      5
+ 115                  32481      0                 38654      0                 33475      0                 35767      0                 37798      0                 48771      4
+ 116                  41448      4                 54115      3                 54843      3                 51721      0                 48605      0                 52908      3
+ 117                  28613      0                 29124      0                 31747      0                 29590      3                 29516      0                 33242      0
+ 118                  85244     14                100128      3                 97282      3                104503      9                101886      0                106372     12
+ 119                  52856      2                 50799      1                 48869      0                 50245      0                 50191      0                 52451      0
+ 120                  51365      2                 48377      0                 49431      0                 48380      0                 48063      3                 49057      0
+{
+  "A-ALINEA": {
+    "seeds": 20,
+    "better_than_A": 6,
+    "mean_delay_change_veh_s": 2704.429301576963,
+    "median_delay_change_veh_s": 3723.42049501805,
+    "mean_change_95ci_veh_s": [
+      -376.3295189790436,
+      5734.281206829305
+    ],
+    "strandings_total": 41
+  },
+  "A-ALINEA-fault": {
+    "seeds": 20,
+    "better_than_A": 6,
+    "mean_delay_change_veh_s": 3937.9732172846575,
+    "median_delay_change_veh_s": 2885.8132563968175,
+    "mean_change_95ci_veh_s": [
+      -10.441185583751016,
+      7887.377577200753
+    ],
+    "strandings_total": 34
+  },
+  "A-ALINEA-miss2": {
+    "seeds": 20,
+    "better_than_A": 6,
+    "mean_delay_change_veh_s": 1041.2421293080556,
+    "median_delay_change_veh_s": 2449.0756525174365,
+    "mean_change_95ci_veh_s": [
+      -3031.723116215913,
+      4805.517904882977
+    ],
+    "strandings_total": 38
+  },
+  "A-ALINEA-noise2": {
+    "seeds": 20,
+    "better_than_A": 6,
+    "mean_delay_change_veh_s": 2904.1613002271524,
+    "median_delay_change_veh_s": 4249.865171723366,
+    "mean_change_95ci_veh_s": [
+      -1281.691434783573,
+      6834.763640825083
+    ],
+    "strandings_total": 31
+  },
+  "A-ALINEA-delay30": {
+    "seeds": 20,
+    "better_than_A": 5,
+    "mean_delay_change_veh_s": 6872.291505466055,
+    "median_delay_change_veh_s": 7181.678914732032,
+    "mean_change_95ci_veh_s": [
+      2834.937647317895,
+      10786.219029769796
+    ],
+    "strandings_total": 68
+  },
+  "A": {
+    "strandings_total": 76
+  }
+}
+Saved results/tmc_alinea/eval_seeds_101-120/comparison.json

@@ -1,0 +1,57 @@
+seed        A delay  down     B25 delay  down     B50 delay  down     B75 delay  down
+ 101          29436  2040         95582  1973        160070  1870        221887  1791
+ 102         117757  2045        170170  1971        235473  1881        309901  1788
+ 103          45029  2023         99598  1994        177034  1882        237578  1788
+ 104          28120  2037         44491  2038        145273  1901        215608  1781
+ 105          58313  2129        153192  2007        234586  1894        321113  1786
+ 106          36978  2095         93153  2019        186570  1881        262930  1778
+ 107          62840  2097        149257  2001        231017  1872        315587  1774
+ 108          27779  2083         91803  1992        177226  1877        271662  1764
+ 109          59973  2071        121253  1990        200704  1881        268147  1788
+ 110          52526  2069        100503  1997        176265  1882        257100  1771
+ 111          76947  2126        158551  2009        257218  1886        363134  1757
+ 112          39454  2115        129310  2006        205858  1886        280579  1786
+ 113          79993  2076        153893  1985        209944  1898        301137  1773
+ 114          62582  2157        151451  2018        237397  1896        319404  1781
+ 115          32481  2103         92616  1994        183320  1870        275600  1754
+ 116          41448  2057        112967  1978        164648  1875        232427  1783
+ 117          28613  2069         42987  2037        123461  1893        192929  1797
+ 118          85244  2121        184176  1992        283362  1857        355663  1755
+ 119          52856  2090         69276  2040        117435  1946        267248  1776
+ 120          51365  2100         71762  2037        187960  1874        272216  1781
+{
+ "B25": {
+  "accumulated_delay_veh_s": 60812.989,
+  "total_delay_main_veh_s": 70390.661,
+  "total_delay_ramp_veh_s": -9577.672,
+  "downstream_flow_veh_h": -81.171,
+  "discharge_flow_active_veh_h": -80.114,
+  "disturbance_ratio": 0.917,
+  "far_upstream_speed_sd_kmh": 17.529,
+  "congestion_duration_s": 898.5,
+  "stops_at_lane_end": -2.0
+ },
+ "B50": {
+  "accumulated_delay_veh_s": 141254.241,
+  "total_delay_main_veh_s": 150792.7,
+  "total_delay_ramp_veh_s": -9538.459,
+  "downstream_flow_veh_h": -200.057,
+  "discharge_flow_active_veh_h": -203.554,
+  "disturbance_ratio": 0.801,
+  "far_upstream_speed_sd_kmh": 14.777,
+  "congestion_duration_s": 918.0,
+  "stops_at_lane_end": -3.15
+ },
+ "B75": {
+  "accumulated_delay_veh_s": 223605.664,
+  "total_delay_main_veh_s": 234121.151,
+  "total_delay_ramp_veh_s": -10515.487,
+  "downstream_flow_veh_h": -307.457,
+  "discharge_flow_active_veh_h": -337.667,
+  "disturbance_ratio": 0.716,
+  "far_upstream_speed_sd_kmh": 16.604,
+  "congestion_duration_s": 664.5,
+  "stops_at_lane_end": -3.75
+ }
+}
+Saved results/acc_sensor_delay/delay_1.0s/eval_seeds_101-120/comparison.json

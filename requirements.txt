@@ -1,0 +1,6 @@
+# Numerical kernel (the only package needed for console runs and tests of the model).
+numpy>=1.24,<3
+# Export only: static figures and the HTML report.
+matplotlib>=3.7,<4
+# Export only: replay GIF.
+Pillow>=10.1,<13

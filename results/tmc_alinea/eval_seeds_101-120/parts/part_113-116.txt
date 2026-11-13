@@ -1,0 +1,66 @@
+seed                A delay strand        A-ALINEA delay strand  A-ALINEA-fault delay strand  A-ALINEA-miss2 delay strand A-ALINEA-noise2 delay strandA-ALINEA-delay30 delay strand
+ 113                  79993     11                 73693      7                 65928      4                 66912      3                 73764     10                 73015      6
+ 114                  62582      0                 67447      3                 65220      0                 69809      0                 63880      3                 71636      5
+ 115                  32481      0                 38654      0                 33475      0                 35767      0                 37798      0                 48771      4
+ 116                  41448      4                 54115      3                 54843      3                 51721      0                 48605      0                 52908      3
+{
+  "A-ALINEA": {
+    "seeds": 4,
+    "better_than_A": 1,
+    "mean_delay_change_veh_s": 4351.334290274952,
+    "median_delay_change_veh_s": 5519.3265596989695,
+    "mean_change_95ci_veh_s": [
+      -3182.119979967518,
+      10716.796291093404
+    ],
+    "strandings_total": 13
+  },
+  "A-ALINEA-fault": {
+    "seeds": 4,
+    "better_than_A": 1,
+    "mean_delay_change_veh_s": 740.6158436446021,
+    "median_delay_change_veh_s": 1816.2059179070202,
+    "mean_change_95ci_veh_s": [
+      -9889.412991670757,
+      10295.054604697543
+    ],
+    "strandings_total": 7
+  },
+  "A-ALINEA-miss2": {
+    "seeds": 4,
+    "better_than_A": 1,
+    "mean_delay_change_veh_s": 1926.485190943793,
+    "median_delay_change_veh_s": 5256.860608449777,
+    "mean_change_95ci_veh_s": [
+      -8004.225618728455,
+      8750.656353290735
+    ],
+    "strandings_total": 3
+  },
+  "A-ALINEA-noise2": {
+    "seeds": 4,
+    "better_than_A": 1,
+    "mean_delay_change_veh_s": 1885.4800691257951,
+    "median_delay_change_veh_s": 3307.2503492275355,
+    "mean_change_95ci_veh_s": [
+      -3343.2303025011224,
+      6237.017146521128
+    ],
+    "strandings_total": 13
+  },
+  "A-ALINEA-delay30": {
+    "seeds": 4,
+    "better_than_A": 1,
+    "mean_delay_change_veh_s": 7456.5763747893925,
+    "median_delay_change_veh_s": 10257.590172099954,
+    "mean_change_95ci_veh_s": [
+      -2368.818360720674,
+      14480.957312988898
+    ],
+    "strandings_total": 18
+  },
+  "A": {
+    "strandings_total": 15
+  }
+}
+Saved results/tmc_alinea/eval_seeds_101-120/parts/part_113-116.json

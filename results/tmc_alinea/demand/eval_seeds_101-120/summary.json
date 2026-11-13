@@ -1,0 +1,398 @@
+[
+ {
+  "step": "ramp",
+  "label": "ramp 350",
+  "mainline_veh_h": 1700,
+  "ramp_peak_veh_h": 350,
+  "no_control": "A-R350",
+  "alinea": {
+   "total_delay_veh_h": 8.370539408588614,
+   "main_delay_veh_h": 6.906969606551882,
+   "ramp_delay_veh_h": 1.4635698020382482,
+   "stops_at_lane_end": 0.05,
+   "hard_braking": 3.6,
+   "max_ramp_queue_mean": 12.0,
+   "max_ramp_queue_worst": 33.0,
+   "overflow_seeds": 2,
+   "spillback_min": 1.3366666666666667,
+   "discharge_flow_veh_h": 2020.7142857142858,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 726.7866417030648
+  },
+  "peak_demand_veh_h": 2050,
+  "peak_demand_over_capacity": 0.9360730593607306,
+  "none": {
+   "total_delay_veh_h": 8.265591988292332,
+   "main_delay_veh_h": 7.385770702372624,
+   "ramp_delay_veh_h": 0.8798212859224976,
+   "stops_at_lane_end": 1.0,
+   "hard_braking": 11.4,
+   "max_ramp_queue_mean": 5.55,
+   "max_ramp_queue_worst": 7.0,
+   "overflow_seeds": 0,
+   "spillback_min": 0.5891666666666667,
+   "discharge_flow_veh_h": 2019.7714285714283,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": 0.10494742029628132,
+   "ci95_veh_h": [
+    -0.08192832066012969,
+    0.2989772307770823
+   ],
+   "pct": 1.2696903070576486,
+   "lower_on_seeds": 4,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -0.4788010958207427,
+   "ci95_veh_h": [
+    -0.8468992541071879,
+    -0.21226744855465426
+   ],
+   "pct": -6.482750617575109,
+   "lower_on_seeds": 20,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 0.5837485161157503,
+   "ci95_veh_h": [
+    0.3445883446814853,
+    0.8721190127682051
+   ],
+   "pct": 66.34853298686524,
+   "lower_on_seeds": 0,
+   "seeds": 20
+  }
+ },
+ {
+  "step": "ramp",
+  "label": "ramp 450",
+  "mainline_veh_h": 1700,
+  "ramp_peak_veh_h": 450,
+  "no_control": "A",
+  "alinea": {
+   "total_delay_veh_h": 15.608647110285014,
+   "main_delay_veh_h": 8.210631361890153,
+   "ramp_delay_veh_h": 7.398015748392615,
+   "stops_at_lane_end": 2.05,
+   "hard_braking": 9.9,
+   "max_ramp_queue_mean": 29.6,
+   "max_ramp_queue_worst": 60.0,
+   "overflow_seeds": 9,
+   "spillback_min": 9.725,
+   "discharge_flow_veh_h": 2093.828571428571,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 531.7193309786095
+  },
+  "peak_demand_veh_h": 2150,
+  "peak_demand_over_capacity": 0.9817351598173516,
+  "none": {
+   "total_delay_veh_h": 14.85741674873586,
+   "main_delay_veh_h": 9.880470183567487,
+   "ramp_delay_veh_h": 4.9769465651488485,
+   "stops_at_lane_end": 3.8,
+   "hard_braking": 30.4,
+   "max_ramp_queue_mean": 6.75,
+   "max_ramp_queue_worst": 9.0,
+   "overflow_seeds": 0,
+   "spillback_min": 1.0858333333333334,
+   "discharge_flow_veh_h": 2085.085714285714,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": 0.7512303615491565,
+   "ci95_veh_h": [
+    -0.10453597749417874,
+    1.5928558907859185
+   ],
+   "pct": 5.056264990433648,
+   "lower_on_seeds": 6,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -1.6698388216773368,
+   "ci95_veh_h": [
+    -2.813401824173195,
+    -0.654654673962616
+   ],
+   "pct": -16.900398368232484,
+   "lower_on_seeds": 15,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 2.421069183243765,
+   "ci95_veh_h": [
+    1.5519818887498387,
+    3.3359566551836486
+   ],
+   "pct": 48.645673638478314,
+   "lower_on_seeds": 1,
+   "seeds": 20
+  }
+ },
+ {
+  "step": "ramp",
+  "label": "ramp 550",
+  "mainline_veh_h": 1700,
+  "ramp_peak_veh_h": 550,
+  "no_control": "A-R550",
+  "alinea": {
+   "total_delay_veh_h": 29.720357450935854,
+   "main_delay_veh_h": 9.067592305383812,
+   "ramp_delay_veh_h": 20.652765145424112,
+   "stops_at_lane_end": 3.65,
+   "hard_braking": 15.7,
+   "max_ramp_queue_mean": 60.9,
+   "max_ramp_queue_worst": 92.0,
+   "overflow_seeds": 20,
+   "spillback_min": 24.014166666666664,
+   "discharge_flow_veh_h": 2113.5428571428574,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 456.0389720099121
+  },
+  "peak_demand_veh_h": 2250,
+  "peak_demand_over_capacity": 1.0273972602739727,
+  "none": {
+   "total_delay_veh_h": 32.533226043592855,
+   "main_delay_veh_h": 14.309408707461976,
+   "ramp_delay_veh_h": 18.223817335769155,
+   "stops_at_lane_end": 13.6,
+   "hard_braking": 48.15,
+   "max_ramp_queue_mean": 21.05,
+   "max_ramp_queue_worst": 89.0,
+   "overflow_seeds": 5,
+   "spillback_min": 5.498333333333333,
+   "discharge_flow_veh_h": 2082.7714285714287,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": -2.812868592656999,
+   "ci95_veh_h": [
+    -4.561516662868646,
+    -1.0657957846861739
+   ],
+   "pct": -8.646140991022222,
+   "lower_on_seeds": 15,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -5.241816402078166,
+   "ci95_veh_h": [
+    -8.192658437955044,
+    -2.9647274223312166
+   ],
+   "pct": -36.631956702338776,
+   "lower_on_seeds": 19,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 2.4289478096549546,
+   "ci95_veh_h": [
+    0.08286686428600253,
+    4.906056425634239
+   ],
+   "pct": 13.328424911763628,
+   "lower_on_seeds": 7,
+   "seeds": 20
+  }
+ },
+ {
+  "step": "main",
+  "label": "mainline 1500",
+  "mainline_veh_h": 1500,
+  "ramp_peak_veh_h": 450,
+  "no_control": "A-M1500",
+  "alinea": {
+   "total_delay_veh_h": 5.593862223464313,
+   "main_delay_veh_h": 4.4312877919962395,
+   "ramp_delay_veh_h": 1.1625744314682336,
+   "stops_at_lane_end": 0.05,
+   "hard_braking": 3.65,
+   "max_ramp_queue_mean": 10.95,
+   "max_ramp_queue_worst": 23.0,
+   "overflow_seeds": 0,
+   "spillback_min": 1.3916666666666666,
+   "discharge_flow_veh_h": 1907.6571428571428,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 805.8157934434759
+  },
+  "peak_demand_veh_h": 1950,
+  "peak_demand_over_capacity": 0.8904109589041096,
+  "none": {
+   "total_delay_veh_h": 5.2972727557980095,
+   "main_delay_veh_h": 4.590516317432097,
+   "ramp_delay_veh_h": 0.7067564383659112,
+   "stops_at_lane_end": 0.55,
+   "hard_braking": 6.3,
+   "max_ramp_queue_mean": 6.6,
+   "max_ramp_queue_worst": 9.0,
+   "overflow_seeds": 0,
+   "spillback_min": 1.0841666666666667,
+   "discharge_flow_veh_h": 1907.6571428571428,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": 0.29658946766630406,
+   "ci95_veh_h": [
+    0.15990352633333976,
+    0.4594709170571032
+   ],
+   "pct": 5.598908746801433,
+   "lower_on_seeds": 1,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -0.15922852543585592,
+   "ci95_veh_h": [
+    -0.2723900110411732,
+    -0.06501400950669915
+   ],
+   "pct": -3.4686408766525694,
+   "lower_on_seeds": 17,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 0.4558179931023222,
+   "ci95_veh_h": [
+    0.2821029808384797,
+    0.6507587809874353
+   ],
+   "pct": 64.49435312626471,
+   "lower_on_seeds": 0,
+   "seeds": 20
+  }
+ },
+ {
+  "step": "main",
+  "label": "mainline 1700",
+  "mainline_veh_h": 1700,
+  "ramp_peak_veh_h": 450,
+  "no_control": "A",
+  "alinea": {
+   "total_delay_veh_h": 15.608647110285014,
+   "main_delay_veh_h": 8.210631361890153,
+   "ramp_delay_veh_h": 7.398015748392615,
+   "stops_at_lane_end": 2.05,
+   "hard_braking": 9.9,
+   "max_ramp_queue_mean": 29.6,
+   "max_ramp_queue_worst": 60.0,
+   "overflow_seeds": 9,
+   "spillback_min": 9.725,
+   "discharge_flow_veh_h": 2093.828571428571,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 531.7193309786095
+  },
+  "peak_demand_veh_h": 2150,
+  "peak_demand_over_capacity": 0.9817351598173516,
+  "none": {
+   "total_delay_veh_h": 14.85741674873586,
+   "main_delay_veh_h": 9.880470183567487,
+   "ramp_delay_veh_h": 4.9769465651488485,
+   "stops_at_lane_end": 3.8,
+   "hard_braking": 30.4,
+   "max_ramp_queue_mean": 6.75,
+   "max_ramp_queue_worst": 9.0,
+   "overflow_seeds": 0,
+   "spillback_min": 1.0858333333333334,
+   "discharge_flow_veh_h": 2085.085714285714,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": 0.7512303615491565,
+   "ci95_veh_h": [
+    -0.10453597749417874,
+    1.5928558907859185
+   ],
+   "pct": 5.056264990433648,
+   "lower_on_seeds": 6,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -1.6698388216773368,
+   "ci95_veh_h": [
+    -2.813401824173195,
+    -0.654654673962616
+   ],
+   "pct": -16.900398368232484,
+   "lower_on_seeds": 15,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 2.421069183243765,
+   "ci95_veh_h": [
+    1.5519818887498387,
+    3.3359566551836486
+   ],
+   "pct": 48.645673638478314,
+   "lower_on_seeds": 1,
+   "seeds": 20
+  }
+ },
+ {
+  "step": "main",
+  "label": "mainline 1900",
+  "mainline_veh_h": 1900,
+  "ramp_peak_veh_h": 450,
+  "no_control": "A-M1900",
+  "alinea": {
+   "total_delay_veh_h": 43.00356262998917,
+   "main_delay_veh_h": 14.994533873079225,
+   "ramp_delay_veh_h": 28.009028756870986,
+   "stops_at_lane_end": 1.0,
+   "hard_braking": 10.25,
+   "max_ramp_queue_mean": 83.1,
+   "max_ramp_queue_worst": 121.0,
+   "overflow_seeds": 20,
+   "spillback_min": 30.03666666666667,
+   "discharge_flow_veh_h": 2180.142857142857,
+   "remaining_vehicles": 0.0,
+   "mean_release_rate_veh_h": 325.07184268997185
+  },
+  "peak_demand_veh_h": 2350,
+  "peak_demand_over_capacity": 1.0730593607305936,
+  "none": {
+   "total_delay_veh_h": 53.11491494719484,
+   "main_delay_veh_h": 27.618891157582315,
+   "ramp_delay_veh_h": 25.496023788826932,
+   "stops_at_lane_end": 10.1,
+   "hard_braking": 63.8,
+   "max_ramp_queue_mean": 37.65,
+   "max_ramp_queue_worst": 112.0,
+   "overflow_seeds": 9,
+   "spillback_min": 8.223333333333333,
+   "discharge_flow_veh_h": 2113.542857142857,
+   "remaining_vehicles": 0.0
+  },
+  "change_total": {
+   "mean_veh_h": -10.111352317205675,
+   "ci95_veh_h": [
+    -12.997431085138423,
+    -7.489123106261964
+   ],
+   "pct": -19.036747639072868,
+   "lower_on_seeds": 20,
+   "seeds": 20
+  },
+  "change_main": {
+   "mean_veh_h": -12.624357284503086,
+   "ci95_veh_h": [
+    -20.677243142952083,
+    -5.737940034476472
+   ],
+   "pct": -45.70913876474463,
+   "lower_on_seeds": 16,
+   "seeds": 20
+  },
+  "change_ramp": {
+   "mean_veh_h": 2.5130049680440605,
+   "ci95_veh_h": [
+    -4.955851345613724,
+    10.348713508137058
+   ],
+   "pct": 9.856458359382804,
+   "lower_on_seeds": 9,
+   "seeds": 20
+  }
+ }
+]
