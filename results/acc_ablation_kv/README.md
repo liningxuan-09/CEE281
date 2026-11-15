@@ -1,25 +1,22 @@
-# Ablation: speed-difference gain k_v
+# Speed-gain ablation
 
-Does string stability decide whether ACC harms the merge bottleneck? Two runs on the same 20 evaluation seeds
-(101–120), same cases (A, B25, B50, B75), control law, spacing (η = 7.57 m, h = 1.27 s), takeover and demand;
-only the speed-difference gain differs.
+Only `k_v` changes; demand, spacing, takeover, ACC shares and seeds 101–120 are identical. Baseline A has mean delay 14.9 veh·h.
 
-| Run | k_v | String-stability criterion k_p h² + 2 k_v h − 2 | Total delay B25 / B50 / B75 (veh·h; A = 14.9) |
+| Setting | k_v (s⁻¹) | Delay-free linear stability criterion | Delay B25 / B50 / B75 (veh·h) |
 |---|---:|---:|---|
-| `fitted_kv_0.2692/` (Gunter et al. fit) | 0.2692 s⁻¹ | −1.30 (unstable) | 51.2 / 83.0 / 124.6 |
-| `../acc_main/` (main controller) | 0.80 s⁻¹ | +0.05 (stable) | 14.5 / 14.5 / 14.0 |
+| [Main controller](../acc_main/README.md) | 0.80 | +0.05 | 14.5 / 14.5 / 14.0 |
+| [Published gain](fitted_kv_0.2692/README.md) | 0.2692 | −1.30 | 51.2 / 83.0 / 124.6 |
 
-| File | Content |
-|---|---|
-| `ablation_kv_comparison.png` | Delay, flow after the merge, disturbance ratio and hard-braking merges for both runs |
-| `mechanism_tests.txt` | Deterministic platoon-disturbance and queue-discharge tests (`acc_mechanism.py`); the two rows that matter here are "main (kv = 0.80)" and "Gunter fit (kv = 0.2692)" |
-| `fitted_kv_0.2692/` | The run with the fitted gain: prediction, results, diagnosis and the changes made while checking |
+The published gain produces growing platoon disturbances and much higher delay. Full per-seed results are in each run's `eval_seeds_101-120/comparison.json`.
 
-Rebuild:
+## Reproduction
+
+Run the main study first, then the fitted-gain study; redraw the comparison from the project root:
 
 ```bash
+sh results/acc_main/eval_seeds_101-120/run.sh
+sh results/acc_ablation_kv/fitted_kv_0.2692/eval_seeds_101-120/run.sh
 python3 -B acc_figures.py --compare results/acc_ablation_kv/fitted_kv_0.2692/eval_seeds_101-120/comparison.json \
-    results/acc_main/eval_seeds_101-120/comparison.json --labels "fitted, kv = 0.2692" "string stable, kv = 0.80" \
-    --title "Ablation: speed-difference gain k_v (same law)" --out results/acc_ablation_kv/ablation_kv_comparison.png
-python3 -B acc_mechanism.py > results/acc_ablation_kv/mechanism_tests.txt
+    results/acc_main/eval_seeds_101-120/comparison.json --labels "fitted gain" "main controller" \
+    --out results/acc_ablation_kv/ablation_kv_comparison.png
 ```
