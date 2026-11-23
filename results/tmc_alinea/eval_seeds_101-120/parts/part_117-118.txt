@@ -1,0 +1,64 @@
+seed                A delay strand        A-ALINEA delay strand  A-ALINEA-fault delay strand  A-ALINEA-miss2 delay strand A-ALINEA-noise2 delay strandA-ALINEA-delay30 delay strand
+ 117                  33235      0                 34076      0                 38031      0                 35226      3                 34699      0                 34006      0
+ 118                 112223     14                103273      0                112215      0                 91833      3                152024     15                131018     15
+{
+  "A-ALINEA": {
+    "seeds": 2,
+    "better_than_ref": 1,
+    "mean_delay_change_veh_s": -4054.382553226249,
+    "median_delay_change_veh_s": -4054.382553226249,
+    "mean_change_95ci_veh_s": [
+      -8949.440564226083,
+      840.6754577735846
+    ],
+    "strandings_total": 0
+  },
+  "A-ALINEA-fault": {
+    "seeds": 2,
+    "better_than_ref": 1,
+    "mean_delay_change_veh_s": 2393.6920999558315,
+    "median_delay_change_veh_s": 2393.6920999558315,
+    "mean_change_95ci_veh_s": [
+      -8.014166941371514,
+      4795.3983668530345
+    ],
+    "strandings_total": 0
+  },
+  "A-ALINEA-miss2": {
+    "seeds": 2,
+    "better_than_ref": 1,
+    "mean_delay_change_veh_s": -9199.514400052947,
+    "median_delay_change_veh_s": -9199.514400052947,
+    "mean_change_95ci_veh_s": [
+      -20389.673427707094,
+      1990.6446276011993
+    ],
+    "strandings_total": 6
+  },
+  "A-ALINEA-noise2": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 20632.396551843158,
+    "median_delay_change_veh_s": 20632.396551843158,
+    "mean_change_95ci_veh_s": [
+      1463.4403600948426,
+      39801.35274359147
+    ],
+    "strandings_total": 15
+  },
+  "A-ALINEA-delay30": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 9782.926257409763,
+    "median_delay_change_veh_s": 9782.926257409763,
+    "mean_change_95ci_veh_s": [
+      770.9391719400373,
+      18794.91334287949
+    ],
+    "strandings_total": 15
+  },
+  "A": {
+    "strandings_total": 14
+  }
+}
+Saved results/tmc_alinea/eval_seeds_101-120/parts/part_117-118.json

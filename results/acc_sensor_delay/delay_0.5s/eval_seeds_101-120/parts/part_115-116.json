@@ -1,0 +1,889 @@
+{
+  "seeds": [
+    115,
+    116
+  ],
+  "cases": {
+    "A": {},
+    "B25": {
+      "acc_share": 0.25
+    },
+    "B50": {
+      "acc_share": 0.5
+    },
+    "B75": {
+      "acc_share": 0.75
+    }
+  },
+  "controller": "stable",
+  "controller_overrides": {},
+  "overrides": {
+    "acc_sensor_delay": 0.5
+  },
+  "a_from": "results/acc_main/eval_seeds_101-120/comparison.json",
+  "config": {
+    "seed": 9,
+    "dt": 0.1,
+    "duration": 3600.0,
+    "demand_end": 2400.0,
+    "main_profile": [
+      [
+        0.0,
+        2400.0,
+        1700.0
+      ]
+    ],
+    "ramp_profile": [
+      [
+        0.0,
+        300.0,
+        100.0
+      ],
+      [
+        300.0,
+        2100.0,
+        450.0
+      ],
+      [
+        2100.0,
+        2400.0,
+        0.0
+      ]
+    ],
+    "road_end": 3000.0,
+    "merge_x": 2500.0,
+    "acc_length": 450.0,
+    "ramp_length": 200.0,
+    "ramp_v0": 16.666666666666668,
+    "ramp_entry_speed": 16.666666666666668,
+    "acc_lane_a": 2.0,
+    "drop_dv": 2.7777777777777777,
+    "align_k": 0.3,
+    "b_safe": 2.0,
+    "b_safe_end": 4.0,
+    "merge_gap_min": 2.0,
+    "merge_horizon": 2.0,
+    "end_trigger": 3.8,
+    "end_margin": 1.0,
+    "force_zone": 60.0,
+    "ramp_release_rate": null,
+    "meter_x": null,
+    "meter_checkin": 30.0,
+    "meter_green": 2.0,
+    "meter_min_red": 2.0,
+    "report_interval": 30.0,
+    "report_dropout": [],
+    "detector_miss_prob": 0.0,
+    "occupancy_noise_sd": 0.0,
+    "report_delay": 0.0,
+    "forecast_horizon": 60.0,
+    "forecast_reports": 4,
+    "ramp_control": null,
+    "alinea_detector": 2400.0,
+    "alinea_target_occ": 0.14,
+    "alinea_gain": 7000.0,
+    "rate_min": 200.0,
+    "rate_max": 900.0,
+    "ramp_storage": null,
+    "report_stale": 60.0,
+    "fallback_rate": 400.0,
+    "main_entry_speed": 25.0,
+    "entry_brake": 0.0,
+    "eval_start": 300.0,
+    "congested_kmh": 40.0,
+    "detectors": [
+      1500.0,
+      2000.0,
+      2400.0,
+      2600.0
+    ],
+    "v0": 33.33,
+    "T": 1.2,
+    "a": 2.0,
+    "b": 2.0,
+    "s0": 2.0,
+    "length": 5.0,
+    "delta": 4.0,
+    "amin": -4.0,
+    "amax": 2.0,
+    "cool": 0.99,
+    "human_model": "idm",
+    "gipps_a": 1.7,
+    "gipps_b": 3.4,
+    "gipps_sm": 1.5,
+    "gipps_tau": 0.97,
+    "acc_share": 0.0,
+    "acc_kp": 0.0131,
+    "acc_kv": 0.8,
+    "acc_eta": 7.5699,
+    "acc_h": 1.27,
+    "acc_takeover_b": 2.0,
+    "acc_fallback_decel": 2.0,
+    "acc_sensor_delay": 0.5
+  },
+  "per_seed": {
+    "A": {
+      "115": {
+        "accumulated_delay_veh_s": 39546.21095648906,
+        "total_delay_main_veh_s": 35528.69409209275,
+        "total_delay_ramp_veh_s": 4017.5168643953493,
+        "total_delay_hdv_veh_s": 39546.210956488125,
+        "total_delay_acc_veh_s": 0,
+        "downstream_flow_veh_h": 2112.0,
+        "discharge_flow_active_veh_h": null,
+        "bottleneck_active_bins": 0,
+        "merge_area_speed_kmh": 67.38976874784184,
+        "far_upstream_speed_kmh": 101.96355760085167,
+        "merge_area_speed_sd_kmh": 22.15767143919849,
+        "far_upstream_speed_sd_kmh": 5.578367026948577,
+        "disturbance_ratio": 0.25175781860724095,
+        "approach_speed_kmh": 69.08773268735347,
+        "congestion_duration_s": 0.0,
+        "max_queue_extent_m": 300.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 11,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 235,
+        "merges_with_acc_follower": 0,
+        "merges_hard_braking_mainline_follower": 34,
+        "acc_vehicles_main": 0,
+        "acc_vehicles_ramp": 0,
+        "acc_takeover_episodes": 0,
+        "acc_takeover_vehicle_s": 0.0,
+        "acc_mainline_vehicle_s": 0.0,
+        "hard_braking_vehicle_s_hdv": 35.6,
+        "hard_braking_vehicle_s_acc": 0.0,
+        "min_net_gap_m": 1.0265335036838223,
+        "min_net_gap_hdv_follower_m": 1.0265335036838223,
+        "min_net_gap_acc_follower_m": null,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1395,
+        "exited": 1395
+      },
+      "116": {
+        "accumulated_delay_veh_s": 41948.949558030734,
+        "total_delay_main_veh_s": 37543.97400896376,
+        "total_delay_ramp_veh_s": 4404.9755490705065,
+        "total_delay_hdv_veh_s": 41948.94955803425,
+        "total_delay_acc_veh_s": 0,
+        "downstream_flow_veh_h": 2081.1428571428573,
+        "discharge_flow_active_veh_h": 2120.0,
+        "bottleneck_active_bins": 3,
+        "merge_area_speed_kmh": 62.354315340690356,
+        "far_upstream_speed_kmh": 101.22710858535163,
+        "merge_area_speed_sd_kmh": 22.678760439715113,
+        "far_upstream_speed_sd_kmh": 6.35458718742508,
+        "disturbance_ratio": 0.2801999343975127,
+        "approach_speed_kmh": 64.20783600264986,
+        "congestion_duration_s": 90.0,
+        "max_queue_extent_m": 300.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 12,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 227,
+        "merges_with_acc_follower": 0,
+        "merges_hard_braking_mainline_follower": 29,
+        "acc_vehicles_main": 0,
+        "acc_vehicles_ramp": 0,
+        "acc_takeover_episodes": 0,
+        "acc_takeover_vehicle_s": 0.0,
+        "acc_mainline_vehicle_s": 0.0,
+        "hard_braking_vehicle_s_hdv": 51.7,
+        "hard_braking_vehicle_s_acc": 0.0,
+        "min_net_gap_m": 1.0151625893181517,
+        "min_net_gap_hdv_follower_m": 1.0151625893181517,
+        "min_net_gap_acc_follower_m": null,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1364,
+        "exited": 1364
+      }
+    },
+    "B25": {
+      "115": {
+        "accumulated_delay_veh_s": 48181.14210579083,
+        "total_delay_main_veh_s": 42667.71973608557,
+        "total_delay_ramp_veh_s": 5513.422369707582,
+        "total_delay_hdv_veh_s": 36412.46690360481,
+        "total_delay_acc_veh_s": 11768.675202188333,
+        "downstream_flow_veh_h": 2106.8571428571427,
+        "discharge_flow_active_veh_h": 2100.0,
+        "bottleneck_active_bins": 12,
+        "merge_area_speed_kmh": 54.007288118457325,
+        "far_upstream_speed_kmh": 102.01931182638296,
+        "merge_area_speed_sd_kmh": 21.674391610722953,
+        "far_upstream_speed_sd_kmh": 8.426455448524637,
+        "disturbance_ratio": 0.3887747162580482,
+        "approach_speed_kmh": 55.46844783557533,
+        "congestion_duration_s": 360.0,
+        "max_queue_extent_m": 600.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 11,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 235,
+        "merges_with_acc_follower": 66,
+        "merges_hard_braking_mainline_follower": 83,
+        "acc_vehicles_main": 292,
+        "acc_vehicles_ramp": 58,
+        "acc_takeover_episodes": 193,
+        "acc_takeover_vehicle_s": 1525.6000000000001,
+        "acc_mainline_vehicle_s": 38301.6,
+        "hard_braking_vehicle_s_hdv": 34.0,
+        "hard_braking_vehicle_s_acc": 24.3,
+        "min_net_gap_m": 1.0180043131954335,
+        "min_net_gap_hdv_follower_m": 1.0180043131954335,
+        "min_net_gap_acc_follower_m": 1.0235973562630534,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1395,
+        "exited": 1395
+      },
+      "116": {
+        "accumulated_delay_veh_s": 71105.75926770052,
+        "total_delay_main_veh_s": 64407.863710139216,
+        "total_delay_ramp_veh_s": 6697.89555756291,
+        "total_delay_hdv_veh_s": 53717.15170434279,
+        "total_delay_acc_veh_s": 17388.607563359357,
+        "downstream_flow_veh_h": 2062.285714285714,
+        "discharge_flow_active_veh_h": 2083.6363636363635,
+        "bottleneck_active_bins": 33,
+        "merge_area_speed_kmh": 44.498264919549484,
+        "far_upstream_speed_kmh": 63.38462139141793,
+        "merge_area_speed_sd_kmh": 22.839451074816857,
+        "far_upstream_speed_sd_kmh": 34.02478990724892,
+        "disturbance_ratio": 1.4897376384306014,
+        "approach_speed_kmh": 44.992526995264065,
+        "congestion_duration_s": 990.0,
+        "max_queue_extent_m": 1300.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 12,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 227,
+        "merges_with_acc_follower": 53,
+        "merges_hard_braking_mainline_follower": 123,
+        "acc_vehicles_main": 277,
+        "acc_vehicles_ramp": 65,
+        "acc_takeover_episodes": 180,
+        "acc_takeover_vehicle_s": 1744.8000000000002,
+        "acc_mainline_vehicle_s": 41894.200000000004,
+        "hard_braking_vehicle_s_hdv": 31.1,
+        "hard_braking_vehicle_s_acc": 12.100000000000001,
+        "min_net_gap_m": 1.0012327236386227,
+        "min_net_gap_hdv_follower_m": 1.0012327236386227,
+        "min_net_gap_acc_follower_m": 1.0894392896261706,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1364,
+        "exited": 1364
+      }
+    },
+    "B50": {
+      "115": {
+        "accumulated_delay_veh_s": 75040.93146087573,
+        "total_delay_main_veh_s": 68348.30240586615,
+        "total_delay_ramp_veh_s": 6692.62905501195,
+        "total_delay_hdv_veh_s": 38440.4657292836,
+        "total_delay_acc_veh_s": 36600.465731594464,
+        "downstream_flow_veh_h": 2041.7142857142858,
+        "discharge_flow_active_veh_h": 2045.4545454545455,
+        "bottleneck_active_bins": 22,
+        "merge_area_speed_kmh": 47.802926717787614,
+        "far_upstream_speed_kmh": 58.15277078459931,
+        "merge_area_speed_sd_kmh": 22.262734714333103,
+        "far_upstream_speed_sd_kmh": 35.66409081586516,
+        "disturbance_ratio": 1.6019636075034416,
+        "approach_speed_kmh": 48.082340769203626,
+        "congestion_duration_s": 660.0,
+        "max_queue_extent_m": 1400.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 11,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 235,
+        "merges_with_acc_follower": 126,
+        "merges_hard_braking_mainline_follower": 99,
+        "acc_vehicles_main": 575,
+        "acc_vehicles_ramp": 122,
+        "acc_takeover_episodes": 378,
+        "acc_takeover_vehicle_s": 3993.8,
+        "acc_mainline_vehicle_s": 88402.90000000001,
+        "hard_braking_vehicle_s_hdv": 21.3,
+        "hard_braking_vehicle_s_acc": 24.6,
+        "min_net_gap_m": 1.0844021535390311,
+        "min_net_gap_hdv_follower_m": 1.0853920718377594,
+        "min_net_gap_acc_follower_m": 1.0844021535390311,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1395,
+        "exited": 1395
+      },
+      "116": {
+        "accumulated_delay_veh_s": 92335.57170119173,
+        "total_delay_main_veh_s": 86180.65358341108,
+        "total_delay_ramp_veh_s": 6154.918117779977,
+        "total_delay_hdv_veh_s": 46788.55113212837,
+        "total_delay_acc_veh_s": 45547.020569062806,
+        "downstream_flow_veh_h": 2010.857142857143,
+        "discharge_flow_active_veh_h": 2032.0,
+        "bottleneck_active_bins": 30,
+        "merge_area_speed_kmh": 46.84399052193294,
+        "far_upstream_speed_kmh": 51.55282113710581,
+        "merge_area_speed_sd_kmh": 23.43599935242364,
+        "far_upstream_speed_sd_kmh": 32.06663510465308,
+        "disturbance_ratio": 1.3682640378353186,
+        "approach_speed_kmh": 46.69010569132296,
+        "congestion_duration_s": 900.0,
+        "max_queue_extent_m": 2100.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 12,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 227,
+        "merges_with_acc_follower": 101,
+        "merges_hard_braking_mainline_follower": 105,
+        "acc_vehicles_main": 574,
+        "acc_vehicles_ramp": 118,
+        "acc_takeover_episodes": 328,
+        "acc_takeover_vehicle_s": 3647.7000000000003,
+        "acc_mainline_vehicle_s": 96885.20000000001,
+        "hard_braking_vehicle_s_hdv": 18.2,
+        "hard_braking_vehicle_s_acc": 22.3,
+        "min_net_gap_m": 1.0067844834270545,
+        "min_net_gap_hdv_follower_m": 1.0067844834270545,
+        "min_net_gap_acc_follower_m": 1.0365981284876398,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1364,
+        "exited": 1364
+      }
+    },
+    "B75": {
+      "115": {
+        "accumulated_delay_veh_s": 104913.05644600549,
+        "total_delay_main_veh_s": 98810.07751730489,
+        "total_delay_ramp_veh_s": 6102.978928474128,
+        "total_delay_hdv_veh_s": 25658.40010726592,
+        "total_delay_acc_veh_s": 79254.65633851317,
+        "downstream_flow_veh_h": 1986.857142857143,
+        "discharge_flow_active_veh_h": 1972.5,
+        "bottleneck_active_bins": 16,
+        "merge_area_speed_kmh": 49.63247822340893,
+        "far_upstream_speed_kmh": 51.9093517896469,
+        "merge_area_speed_sd_kmh": 20.25867551807924,
+        "far_upstream_speed_sd_kmh": 30.312056776288152,
+        "disturbance_ratio": 1.4962506679786187,
+        "approach_speed_kmh": 49.47767615411784,
+        "congestion_duration_s": 480.0,
+        "max_queue_extent_m": 2000.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 25,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 235,
+        "merges_with_acc_follower": 182,
+        "merges_hard_braking_mainline_follower": 106,
+        "acc_vehicles_main": 884,
+        "acc_vehicles_ramp": 170,
+        "acc_takeover_episodes": 402,
+        "acc_takeover_vehicle_s": 4477.8,
+        "acc_mainline_vehicle_s": 153369.1,
+        "hard_braking_vehicle_s_hdv": 6.5,
+        "hard_braking_vehicle_s_acc": 36.2,
+        "min_net_gap_m": 1.0653947426708328,
+        "min_net_gap_hdv_follower_m": 1.0662797997188136,
+        "min_net_gap_acc_follower_m": 1.0653947426708328,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1395,
+        "exited": 1395
+      },
+      "116": {
+        "accumulated_delay_veh_s": 102910.71532041444,
+        "total_delay_main_veh_s": 97977.79804730404,
+        "total_delay_ramp_veh_s": 4932.917273119132,
+        "total_delay_hdv_veh_s": 25056.201763252186,
+        "total_delay_acc_veh_s": 77854.51355717104,
+        "downstream_flow_veh_h": 1976.5714285714287,
+        "discharge_flow_active_veh_h": 2000.0,
+        "bottleneck_active_bins": 15,
+        "merge_area_speed_kmh": 54.087794758168684,
+        "far_upstream_speed_kmh": 50.498587232598815,
+        "merge_area_speed_sd_kmh": 23.69248932097759,
+        "far_upstream_speed_sd_kmh": 28.730020827895792,
+        "disturbance_ratio": 1.2126214530972868,
+        "approach_speed_kmh": 53.84029083294753,
+        "congestion_duration_s": 450.0,
+        "max_queue_extent_m": 2200.0,
+        "queue_reaches_entry": false,
+        "max_main_external": 36,
+        "max_ramp_external": 2,
+        "stops_at_lane_end": 0,
+        "merges": 227,
+        "merges_with_acc_follower": 182,
+        "merges_hard_braking_mainline_follower": 111,
+        "acc_vehicles_main": 864,
+        "acc_vehicles_ramp": 173,
+        "acc_takeover_episodes": 418,
+        "acc_takeover_vehicle_s": 4707.900000000001,
+        "acc_mainline_vehicle_s": 145763.0,
+        "hard_braking_vehicle_s_hdv": 1.7000000000000002,
+        "hard_braking_vehicle_s_acc": 50.1,
+        "min_net_gap_m": 1.0328185432081227,
+        "min_net_gap_hdv_follower_m": 1.4776577009224638,
+        "min_net_gap_acc_follower_m": 1.0328185432081227,
+        "min_applied_acceleration_mps2": -4.0,
+        "remaining_on_road": 0,
+        "offered": 1364,
+        "exited": 1364
+      }
+    }
+  },
+  "means": {
+    "A": {
+      "accumulated_delay_veh_s": 40747.5802572599,
+      "total_delay_main_veh_s": 36536.334050528254,
+      "total_delay_ramp_veh_s": 4211.246206732928,
+      "total_delay_hdv_veh_s": 40747.58025726119,
+      "total_delay_acc_veh_s": 0.0,
+      "downstream_flow_veh_h": 2096.5714285714284,
+      "discharge_flow_active_veh_h": 2120.0,
+      "bottleneck_active_bins": 1.5,
+      "merge_area_speed_kmh": 64.8720420442661,
+      "far_upstream_speed_kmh": 101.59533309310166,
+      "merge_area_speed_sd_kmh": 22.4182159394568,
+      "far_upstream_speed_sd_kmh": 5.9664771071868286,
+      "disturbance_ratio": 0.26597887650237684,
+      "approach_speed_kmh": 66.64778434500167,
+      "congestion_duration_s": 45.0,
+      "max_queue_extent_m": 300.0,
+      "queue_reaches_entry": null,
+      "max_main_external": 11.5,
+      "max_ramp_external": 2.0,
+      "stops_at_lane_end": 0.0,
+      "merges": 231.0,
+      "merges_with_acc_follower": 0.0,
+      "merges_hard_braking_mainline_follower": 31.5,
+      "acc_vehicles_main": 0.0,
+      "acc_vehicles_ramp": 0.0,
+      "acc_takeover_episodes": 0.0,
+      "acc_takeover_vehicle_s": 0.0,
+      "acc_mainline_vehicle_s": 0.0,
+      "hard_braking_vehicle_s_hdv": 43.650000000000006,
+      "hard_braking_vehicle_s_acc": 0.0,
+      "min_net_gap_m": 1.020848046500987,
+      "min_net_gap_hdv_follower_m": 1.020848046500987,
+      "min_net_gap_acc_follower_m": null,
+      "min_applied_acceleration_mps2": -4.0,
+      "remaining_on_road": 0.0,
+      "offered": 1379.5,
+      "exited": 1379.5,
+      "queue_reaches_entry_seeds": 0
+    },
+    "B25": {
+      "accumulated_delay_veh_s": 59643.45068674567,
+      "total_delay_main_veh_s": 53537.791723112394,
+      "total_delay_ramp_veh_s": 6105.6589636352455,
+      "total_delay_hdv_veh_s": 45064.8093039738,
+      "total_delay_acc_veh_s": 14578.641382773845,
+      "downstream_flow_veh_h": 2084.5714285714284,
+      "discharge_flow_active_veh_h": 2091.818181818182,
+      "bottleneck_active_bins": 22.5,
+      "merge_area_speed_kmh": 49.252776519003405,
+      "far_upstream_speed_kmh": 82.70196660890045,
+      "merge_area_speed_sd_kmh": 22.256921342769907,
+      "far_upstream_speed_sd_kmh": 21.22562267788678,
+      "disturbance_ratio": 0.9392561773443248,
+      "approach_speed_kmh": 50.2304874154197,
+      "congestion_duration_s": 675.0,
+      "max_queue_extent_m": 950.0,
+      "queue_reaches_entry": null,
+      "max_main_external": 11.5,
+      "max_ramp_external": 2.0,
+      "stops_at_lane_end": 0.0,
+      "merges": 231.0,
+      "merges_with_acc_follower": 59.5,
+      "merges_hard_braking_mainline_follower": 103.0,
+      "acc_vehicles_main": 284.5,
+      "acc_vehicles_ramp": 61.5,
+      "acc_takeover_episodes": 186.5,
+      "acc_takeover_vehicle_s": 1635.2000000000003,
+      "acc_mainline_vehicle_s": 40097.9,
+      "hard_braking_vehicle_s_hdv": 32.55,
+      "hard_braking_vehicle_s_acc": 18.200000000000003,
+      "min_net_gap_m": 1.009618518417028,
+      "min_net_gap_hdv_follower_m": 1.009618518417028,
+      "min_net_gap_acc_follower_m": 1.056518322944612,
+      "min_applied_acceleration_mps2": -4.0,
+      "remaining_on_road": 0.0,
+      "offered": 1379.5,
+      "exited": 1379.5,
+      "queue_reaches_entry_seeds": 0,
+      "takeover_share_of_acc_time": 0.04073950203133636
+    },
+    "B50": {
+      "accumulated_delay_veh_s": 83688.25158103372,
+      "total_delay_main_veh_s": 77264.47799463861,
+      "total_delay_ramp_veh_s": 6423.773586395964,
+      "total_delay_hdv_veh_s": 42614.50843070599,
+      "total_delay_acc_veh_s": 41073.743150328635,
+      "downstream_flow_veh_h": 2026.2857142857142,
+      "discharge_flow_active_veh_h": 2038.7272727272727,
+      "bottleneck_active_bins": 26.0,
+      "merge_area_speed_kmh": 47.323458619860276,
+      "far_upstream_speed_kmh": 54.85279596085256,
+      "merge_area_speed_sd_kmh": 22.84936703337837,
+      "far_upstream_speed_sd_kmh": 33.86536296025912,
+      "disturbance_ratio": 1.48511382266938,
+      "approach_speed_kmh": 47.3862232302633,
+      "congestion_duration_s": 780.0,
+      "max_queue_extent_m": 1750.0,
+      "queue_reaches_entry": null,
+      "max_main_external": 11.5,
+      "max_ramp_external": 2.0,
+      "stops_at_lane_end": 0.0,
+      "merges": 231.0,
+      "merges_with_acc_follower": 113.5,
+      "merges_hard_braking_mainline_follower": 102.0,
+      "acc_vehicles_main": 574.5,
+      "acc_vehicles_ramp": 120.0,
+      "acc_takeover_episodes": 353.0,
+      "acc_takeover_vehicle_s": 3820.75,
+      "acc_mainline_vehicle_s": 92644.05000000002,
+      "hard_braking_vehicle_s_hdv": 19.75,
+      "hard_braking_vehicle_s_acc": 23.450000000000003,
+      "min_net_gap_m": 1.0455933184830428,
+      "min_net_gap_hdv_follower_m": 1.046088277632407,
+      "min_net_gap_acc_follower_m": 1.0605001410133355,
+      "min_applied_acceleration_mps2": -4.0,
+      "remaining_on_road": 0.0,
+      "offered": 1379.5,
+      "exited": 1379.5,
+      "queue_reaches_entry_seeds": 0,
+      "takeover_share_of_acc_time": 0.041413482120717826
+    },
+    "B75": {
+      "accumulated_delay_veh_s": 103911.88588320996,
+      "total_delay_main_veh_s": 98393.93778230446,
+      "total_delay_ramp_veh_s": 5517.94810079663,
+      "total_delay_hdv_veh_s": 25357.300935259052,
+      "total_delay_acc_veh_s": 78554.58494784212,
+      "downstream_flow_veh_h": 1981.7142857142858,
+      "discharge_flow_active_veh_h": 1986.25,
+      "bottleneck_active_bins": 15.5,
+      "merge_area_speed_kmh": 51.860136490788804,
+      "far_upstream_speed_kmh": 51.20396951112286,
+      "merge_area_speed_sd_kmh": 21.975582419528415,
+      "far_upstream_speed_sd_kmh": 29.521038802091972,
+      "disturbance_ratio": 1.3544360605379526,
+      "approach_speed_kmh": 51.65898349353269,
+      "congestion_duration_s": 465.0,
+      "max_queue_extent_m": 2100.0,
+      "queue_reaches_entry": null,
+      "max_main_external": 30.5,
+      "max_ramp_external": 2.0,
+      "stops_at_lane_end": 0.0,
+      "merges": 231.0,
+      "merges_with_acc_follower": 182.0,
+      "merges_hard_braking_mainline_follower": 108.5,
+      "acc_vehicles_main": 874.0,
+      "acc_vehicles_ramp": 171.5,
+      "acc_takeover_episodes": 410.0,
+      "acc_takeover_vehicle_s": 4592.85,
+      "acc_mainline_vehicle_s": 149566.05,
+      "hard_braking_vehicle_s_hdv": 4.1,
+      "hard_braking_vehicle_s_acc": 43.150000000000006,
+      "min_net_gap_m": 1.0491066429394778,
+      "min_net_gap_hdv_follower_m": 1.2719687503206387,
+      "min_net_gap_acc_follower_m": 1.0491066429394778,
+      "min_applied_acceleration_mps2": -4.0,
+      "remaining_on_road": 0.0,
+      "offered": 1379.5,
+      "exited": 1379.5,
+      "queue_reaches_entry_seeds": 0,
+      "takeover_share_of_acc_time": 0.03074727650747246
+    }
+  },
+  "paired": {
+    "B25": {
+      "accumulated_delay_veh_s": {
+        "seeds": 2,
+        "mean_change": 18895.870429485774,
+        "median_change": 18895.870429485774,
+        "mean_change_95ci": [
+          8634.931149301767,
+          29156.809709669782
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_main_veh_s": {
+        "seeds": 2,
+        "mean_change": 17001.457672584136,
+        "median_change": 17001.457672584136,
+        "mean_change_95ci": [
+          7139.02564399282,
+          26863.889701175453
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_ramp_veh_s": {
+        "seeds": 2,
+        "mean_change": 1894.412756902318,
+        "median_change": 1894.412756902318,
+        "mean_change_95ci": [
+          1495.905505312233,
+          2292.920008492403
+        ],
+        "higher_than_A": 2
+      },
+      "downstream_flow_veh_h": {
+        "seeds": 2,
+        "mean_change": -12.000000000000227,
+        "median_change": -12.000000000000227,
+        "mean_change_95ci": [
+          -18.857142857143117,
+          -5.142857142857338
+        ],
+        "higher_than_A": 0
+      },
+      "discharge_flow_active_veh_h": {
+        "seeds": 1,
+        "mean_change": -36.36363636363649,
+        "median_change": -36.36363636363649,
+        "mean_change_95ci": [
+          -36.36363636363649,
+          -36.36363636363649
+        ],
+        "higher_than_A": 0
+      },
+      "disturbance_ratio": {
+        "seeds": 2,
+        "mean_change": 0.673277300841948,
+        "median_change": 0.673277300841948,
+        "mean_change_95ci": [
+          0.13701689765080727,
+          1.2095377040330888
+        ],
+        "higher_than_A": 2
+      },
+      "far_upstream_speed_sd_kmh": {
+        "seeds": 2,
+        "mean_change": 15.25914557069995,
+        "median_change": 15.25914557069995,
+        "mean_change_95ci": [
+          2.84808842157606,
+          27.67020271982384
+        ],
+        "higher_than_A": 2
+      },
+      "congestion_duration_s": {
+        "seeds": 2,
+        "mean_change": 630.0,
+        "median_change": 630.0,
+        "mean_change_95ci": [
+          360.0,
+          900.0
+        ],
+        "higher_than_A": 2
+      },
+      "stops_at_lane_end": {
+        "seeds": 2,
+        "mean_change": 0.0,
+        "median_change": 0.0,
+        "mean_change_95ci": [
+          0.0,
+          0.0
+        ],
+        "higher_than_A": 0
+      }
+    },
+    "B50": {
+      "accumulated_delay_veh_s": {
+        "seeds": 2,
+        "mean_change": 42940.67132377383,
+        "median_change": 42940.67132377383,
+        "mean_change_95ci": [
+          35494.72050438666,
+          50386.622143160996
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_main_veh_s": {
+        "seeds": 2,
+        "mean_change": 40728.14394411036,
+        "median_change": 40728.14394411036,
+        "mean_change_95ci": [
+          32819.6083137734,
+          48636.67957444732
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_ramp_veh_s": {
+        "seeds": 2,
+        "mean_change": 2212.527379663036,
+        "median_change": 2212.527379663036,
+        "mean_change_95ci": [
+          1749.9425687094708,
+          2675.112190616601
+        ],
+        "higher_than_A": 2
+      },
+      "downstream_flow_veh_h": {
+        "seeds": 2,
+        "mean_change": -70.28571428571433,
+        "median_change": -70.28571428571433,
+        "mean_change_95ci": [
+          -70.28571428571445,
+          -70.28571428571422
+        ],
+        "higher_than_A": 0
+      },
+      "discharge_flow_active_veh_h": {
+        "seeds": 1,
+        "mean_change": -88.0,
+        "median_change": -88.0,
+        "mean_change_95ci": [
+          -88.0,
+          -88.0
+        ],
+        "higher_than_A": 0
+      },
+      "disturbance_ratio": {
+        "seeds": 2,
+        "mean_change": 1.2191349461670034,
+        "median_change": 1.2191349461670034,
+        "mean_change_95ci": [
+          1.088064103437806,
+          1.3502057888962007
+        ],
+        "higher_than_A": 2
+      },
+      "far_upstream_speed_sd_kmh": {
+        "seeds": 2,
+        "mean_change": 27.89888585307229,
+        "median_change": 27.89888585307229,
+        "mean_change_95ci": [
+          25.712047917228,
+          30.08572378891658
+        ],
+        "higher_than_A": 2
+      },
+      "congestion_duration_s": {
+        "seeds": 2,
+        "mean_change": 735.0,
+        "median_change": 735.0,
+        "mean_change_95ci": [
+          660.0,
+          810.0
+        ],
+        "higher_than_A": 2
+      },
+      "stops_at_lane_end": {
+        "seeds": 2,
+        "mean_change": 0.0,
+        "median_change": 0.0,
+        "mean_change_95ci": [
+          0.0,
+          0.0
+        ],
+        "higher_than_A": 0
+      }
+    },
+    "B75": {
+      "accumulated_delay_veh_s": {
+        "seeds": 2,
+        "mean_change": 63164.305625950066,
+        "median_change": 63164.305625950066,
+        "mean_change_95ci": [
+          60961.76576238371,
+          65366.845489516425
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_main_veh_s": {
+        "seeds": 2,
+        "mean_change": 61857.60373177621,
+        "median_change": 61857.60373177621,
+        "mean_change_95ci": [
+          60433.82403834027,
+          63281.38342521214
+        ],
+        "higher_than_A": 2
+      },
+      "total_delay_ramp_veh_s": {
+        "seeds": 2,
+        "mean_change": 1306.7018940637022,
+        "median_change": 1306.7018940637022,
+        "mean_change_95ci": [
+          527.9417240486255,
+          2085.462064078779
+        ],
+        "higher_than_A": 2
+      },
+      "downstream_flow_veh_h": {
+        "seeds": 2,
+        "mean_change": -114.85714285714289,
+        "median_change": -114.85714285714289,
+        "mean_change_95ci": [
+          -125.14285714285711,
+          -104.57142857142867
+        ],
+        "higher_than_A": 0
+      },
+      "discharge_flow_active_veh_h": {
+        "seeds": 1,
+        "mean_change": -120.0,
+        "median_change": -120.0,
+        "mean_change_95ci": [
+          -120.0,
+          -120.0
+        ],
+        "higher_than_A": 0
+      },
+      "disturbance_ratio": {
+        "seeds": 2,
+        "mean_change": 1.088457184035576,
+        "median_change": 1.088457184035576,
+        "mean_change_95ci": [
+          0.9324215186997741,
+          1.2444928493713778
+        ],
+        "higher_than_A": 2
+      },
+      "far_upstream_speed_sd_kmh": {
+        "seeds": 2,
+        "mean_change": 23.554561694905143,
+        "median_change": 23.554561694905143,
+        "mean_change_95ci": [
+          22.37543364047071,
+          24.733689749339575
+        ],
+        "higher_than_A": 2
+      },
+      "congestion_duration_s": {
+        "seeds": 2,
+        "mean_change": 420.0,
+        "median_change": 420.0,
+        "mean_change_95ci": [
+          360.0,
+          480.0
+        ],
+        "higher_than_A": 2
+      },
+      "stops_at_lane_end": {
+        "seeds": 2,
+        "mean_change": 0.0,
+        "median_change": 0.0,
+        "mean_change_95ci": [
+          0.0,
+          0.0
+        ],
+        "higher_than_A": 0
+      }
+    }
+  }
+}

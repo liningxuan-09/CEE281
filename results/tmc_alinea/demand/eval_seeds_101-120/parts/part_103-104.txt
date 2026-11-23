@@ -1,0 +1,108 @@
+seed                A delay strand        A-ALINEA delay strand          A-R350 delay strand   A-ALINEA-R350 delay strand          A-R550 delay strand   A-ALINEA-R550 delay strand         A-M1500 delay strand  A-ALINEA-M1500 delay strand         A-M1900 delay strand  A-ALINEA-M1900 delay strand
+ 103                  59347      7                 51823      3                 31760      0                 32107      0                119573     22                102889      5                 25224      0                 25061      3                239664      9                128858      6
+ 104                  33908      3                 39396      3                 26112      0                 26322      0                 49713      0                 49342      0                 18503      0                 18882      0                136296     10                106326      0
+{
+  "A-ALINEA": {
+    "seeds": 2,
+    "better_than_ref": 1,
+    "mean_delay_change_veh_s": -1018.1421781843819,
+    "median_delay_change_veh_s": -1018.1421781843819,
+    "mean_change_95ci_veh_s": [
+      -7524.149197211089,
+      5487.864840842325
+    ],
+    "strandings_total": 6
+  },
+  "A-R350": {
+    "seeds": 2,
+    "better_than_ref": 2,
+    "mean_delay_change_veh_s": -17691.961708446775,
+    "median_delay_change_veh_s": -17691.961708446775,
+    "mean_change_95ci_veh_s": [
+      -27587.670037881315,
+      -7796.2533790122325
+    ],
+    "strandings_total": 0
+  },
+  "A-ALINEA-R350": {
+    "seeds": 2,
+    "better_than_ref": 2,
+    "mean_delay_change_veh_s": -17413.569912365056,
+    "median_delay_change_veh_s": -17413.569912365056,
+    "mean_change_95ci_veh_s": [
+      -27240.877161791137,
+      -7586.262662938971
+    ],
+    "strandings_total": 0
+  },
+  "A-R550": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 38015.35129408029,
+    "median_delay_change_veh_s": 38015.35129408029,
+    "mean_change_95ci_veh_s": [
+      15805.081239242427,
+      60225.621348918154
+    ],
+    "strandings_total": 22
+  },
+  "A-ALINEA-R550": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 29487.749694177972,
+    "median_delay_change_veh_s": 29487.749694177972,
+    "mean_change_95ci_veh_s": [
+      15433.813341364039,
+      43541.686046991905
+    ],
+    "strandings_total": 5
+  },
+  "A-M1500": {
+    "seeds": 2,
+    "better_than_ref": 2,
+    "mean_delay_change_veh_s": -24764.114999548685,
+    "median_delay_change_veh_s": -24764.114999548685,
+    "mean_change_95ci_veh_s": [
+      -34123.33763833543,
+      -15404.89236076194
+    ],
+    "strandings_total": 0
+  },
+  "A-ALINEA-M1500": {
+    "seeds": 2,
+    "better_than_ref": 2,
+    "mean_delay_change_veh_s": -24656.375426924184,
+    "median_delay_change_veh_s": -24656.375426924184,
+    "mean_change_95ci_veh_s": [
+      -34286.15191836821,
+      -15026.59893548016
+    ],
+    "strandings_total": 3
+  },
+  "A-M1900": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 141352.28737036642,
+    "median_delay_change_veh_s": 141352.28737036642,
+    "mean_change_95ci_veh_s": [
+      102388.26717971815,
+      180316.3075610147
+    ],
+    "strandings_total": 19
+  },
+  "A-ALINEA-M1900": {
+    "seeds": 2,
+    "better_than_ref": 0,
+    "mean_delay_change_veh_s": 70963.99600267505,
+    "median_delay_change_veh_s": 70963.99600267505,
+    "mean_change_95ci_veh_s": [
+      69510.32790042597,
+      72417.66410492413
+    ],
+    "strandings_total": 6
+  },
+  "A": {
+    "strandings_total": 10
+  }
+}
+Saved results/tmc_alinea/demand/eval_seeds_101-120/parts/part_103-104.json
