@@ -32,7 +32,6 @@ def main(argv=None):
     parser.add_argument('--rate-max', type=float, help='ALINEA maximum release rate in veh/h (default: Config).')
     parser.add_argument('--save', action='store_true', help='Explicitly export data and presentation files.')
     parser.add_argument('--gif', action='store_true', help='Also export a GIF; requires --save.')
-    parser.add_argument('--validate', action='store_true', help='Run the additional seed/time-step checks.')
     parser.add_argument('--output', type=Path, help='New output directory; requires --save.')
     args = parser.parse_args(argv)
     if (args.gif or args.output is not None) and not args.save:
@@ -72,12 +71,6 @@ def main(argv=None):
     results = {'with_ramp': run(config, record=args.save)}
     print(json.dumps(results['with_ramp']['summary'], indent=2))
 
-    # Verification returns an in-memory report, just like the simulation kernel.
-    evidence = None
-    if args.validate:
-        from validate import validate
-        evidence = validate()
-
     # No-save mode stops here: no result directory, plots, CSV or report is created.
     if not args.save:
         print('Finished. No simulation results were saved.')
@@ -89,8 +82,6 @@ def main(argv=None):
         (destination / f'{name}_raw.json').write_text(json.dumps(result), encoding='utf-8')
     from present import render
     render(results, destination)
-    if evidence is not None:
-        (destination / 'validation.json').write_text(json.dumps(evidence, indent=2), encoding='utf-8')
     if args.gif:
         from make_gif import make
         make(destination)

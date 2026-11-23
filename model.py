@@ -1,4 +1,5 @@
-"""All-HDV freeway with an on-ramp and an explicit acceleration lane. SI units internally.
+"""Single-lane freeway with an on-ramp and an explicit acceleration lane: human-driven and ACC vehicles,
+detectors and ALINEA ramp metering. SI units internally.
 
 Ramp vehicles drive a ramp road and then a parallel acceleration lane (lane 1) beside the single
 mainline lane (lane 0). Car following everywhere is IDM with the constant-acceleration heuristic
@@ -13,6 +14,9 @@ has merged in front of them.
 ACC vehicles (acc_share of both streams) follow on the mainline with the main controller (acc_command:
 the following law of Gunter et al. 2020 with string-stable gains), fed only by onboard readings (acc_inputs),
 with a driver takeover. On the ramp road and the acceleration lane they drive and merge like HDVs.
+
+Human-model check: with human_model = 'gipps' the human drivers follow on the mainline with Gipps's (1981)
+model instead of IDM+CAH (gipps, follow); everything else is unchanged.
 """
 from dataclasses import dataclass, asdict
 from typing import Optional
@@ -24,10 +28,10 @@ import numpy as np
 
 @dataclass
 class Config:
-    """Parameters for the HDV merge-bottleneck baseline. Meters, seconds, m/s unless noted.
+    """All model parameters. Meters, seconds, m/s unless noted.
 
     Defaults are the chosen all-HDV baseline: seed 9, mainline 1,700 veh/h, ramp
-    100 -> 450 -> 0 veh/h (5 / 30 / 5 min), 2 km road, 450 m acceleration lane: a clear merge
+    100 -> 450 -> 0 veh/h (5 / 30 / 5 min), 3 km road, 450 m acceleration lane: a clear merge
     bottleneck in which only a few ramp vehicles have to wait at the end of the acceleration lane."""
     seed: int = 9
     dt: float = 0.1
@@ -37,9 +41,11 @@ class Config:
     main_profile: tuple = ((0.0, 2400.0, 1700.0),)
     ramp_profile: tuple = ((0.0, 300.0, 100.0), (300.0, 2100.0, 450.0), (2100.0, 2400.0, 0.0))
     # Geometry (mainline coordinates). The acceleration lane runs beside the mainline from
-    # merge_x - acc_length to merge_x; the ramp road before it is ramp_length long.
-    road_end: float = 2000.0
-    merge_x: float = 1500.0
+    # merge_x - acc_length to merge_x; the ramp road before it is ramp_length long. The mainline runs
+    # 2.05 km before the acceleration lane starts, so that queues from the merge stay on the road in the
+    # main cases instead of reaching the entrance (with 1.05 km they reached it in the ACC cases).
+    road_end: float = 3000.0
+    merge_x: float = 2500.0
     acc_length: float = 450.0
     ramp_length: float = 200.0
     # Ramp road and acceleration lane behaviour.
@@ -86,23 +92,24 @@ class Config:
     # Hadj-Salem & Blosseville 1991) updates the release rate every report_interval s from the
     # occupancy measured at alinea_detector: r_k = clip(r_{k-1} + K_R (o* - o_k), rate_min, rate_max).
     ramp_control: Optional[str] = None
-    # Detector 1.4 km: downstream of most merges (merges spread along the acceleration lane, mean
-    # 1.33 km); its flow-occupancy data show the congested branch, while 1.6 km never leaves free flow.
-    alinea_detector: float = 1400.0
+    # Detector 2.4 km (100 m before the lane end): downstream of about 70% of the merges (they spread along
+    # the acceleration lane, median 2.11 km); its flow-occupancy data show the congested branch, while the
+    # detector at 2.6 km never leaves free flow.
+    alinea_detector: float = 2400.0
     alinea_target_occ: float = 0.14     # o*, fraction of time occupied
     alinea_gain: float = 7000.0         # K_R, veh/h per unit occupancy (= 70 veh/h per %)
     rate_min: float = 200.0             # veh/h
     rate_max: float = 900.0             # veh/h (shortest signal cycle 4 s, single-lane one car per green)
-    # Queue override: None = off (default). With a number, more vehicles than this before the stop line
-    # force the maximum rate (protects the street; tested as an ablation). The ramp holds about 28.
+    # Queue override: None = off (default; not used in any experiment). With a number, more vehicles than
+    # this before the stop line force the maximum rate. The ramp holds about 28.
     ramp_storage: Optional[int] = None
     report_stale: float = 60.0          # s without a valid occupancy report before the fallback
-    fallback_rate: float = 500.0        # veh/h, fixed release rate used without valid reports
+    fallback_rate: float = 400.0        # veh/h, fixed release rate used without valid reports (below the 450 ramp peak)
     main_entry_speed: float = 25.0
     entry_brake: float = 0.0
     eval_start: float = 300.0
     congested_kmh: float = 40.0
-    detectors: tuple = (500.0, 1000.0, 1400.0, 1600.0)
+    detectors: tuple = (1500.0, 2000.0, 2400.0, 2600.0)
     # IDM: v0 (m/s), T (s), a/b (m/s^2), s0/length (m), delta. a = 2.0 with b = 2.0 and T = 1.2 s
     # keeps platoons string-stable at every speed, so slowdowns at the merge do not grow into
     # stop-and-go waves; single-lane capacity is about 2,200 veh/h.
@@ -118,6 +125,19 @@ class Config:
     # Constant-acceleration heuristic (Kesting, Treiber & Helbing 2010): softens IDM braking when
     # a vehicle cuts in at a short gap but is not slower; cool = 0 gives plain IDM.
     cool: float = 0.99
+    # Second human-driver model (human-model check): 'idm' (IDM+CAH above, the default) or 'gipps'
+    # (Gipps 1981). With 'gipps' every human-driven vehicle follows on the mainline with gipps(); the ramp
+    # road, the acceleration-lane manoeuvre and the gap-acceptance rule (merge_test) are unchanged, and ACC
+    # vehicles keep the ACC law (their driver takeover then uses Gipps as the driver's own law). Gipps's average values: a_G = 1.7 m/s^2,
+    # b_G = -2 a_G = -3.4 m/s^2 (stored as a magnitude), s_m = 1.5 m so that length + s_m = 6.5 m, and
+    # b_hat = b_G, which gives the steady-state gap s_m + 1.5 tau v. Project choice: tau = 0.97 s (his
+    # value: 2/3 s), so that the capacity at v0, v0 / (length + s_m + 1.5 tau v0) = 2,180 veh/h, matches
+    # the IDM capacity (about 2,190 veh/h); with 2/3 s Gipps traffic would carry about 3,000 veh/h.
+    human_model: str = 'idm'
+    gipps_a: float = 1.7               # m/s^2
+    gipps_b: float = 3.4               # m/s^2, magnitude of b_G (and of b_hat)
+    gipps_sm: float = 1.5              # m
+    gipps_tau: float = 0.97            # s
     # ACC (adaptive cruise control). acc_share is the equipped fraction of both streams. Each arrival
     # draws one uniform number from its own random stream and is equipped if it is below acc_share, so
     # arrivals are identical for every share and assignments are nested (every vehicle equipped at 25%
@@ -172,13 +192,54 @@ def drive(v, gap, lv, la, c, v0=None):
                      al - np.where(dv > 0, dv * dv, 0.0) / (2 * g))
     blend = (1 - c.cool) * a_idm + c.cool * (a_cah + c.b * np.tanh((a_idm - a_cah) / c.b))
     acc = np.where(~finite | (a_idm >= a_cah), a_idm, blend)
-    # Collision-avoidance floor: when closing in, brake at least as hard as needed to come down
-    # to the leader's speed 0.5 m behind it (constant leader speed).
+    return collision_floor(acc, v, g, lv, finite, c)
+
+
+def collision_floor(acc, v, g, lv, finite, c):
+    """Collision-avoidance floor (project rule, the same for both human models): when closing in, brake
+    at least as hard as needed to come down to the leader's speed 0.5 m behind it (constant leader speed).
+    g: net gap (any positive number where finite is False)."""
     dv = v - lv
     room = np.maximum(g - 0.5, 0.05)
     need = -np.where(dv > 0, dv * dv, 0.0) / (2 * room)
-    # Only when that takes more than comfortable braking (ordinary approaches stay pure IDM+CAH).
+    # Only when that takes more than comfortable braking (ordinary approaches keep the pure law).
     return np.where(finite & (dv > 0) & (need < -c.b), np.minimum(acc, need), acc)
+
+
+def gipps(v, gap=np.inf, leader_v=0.0, c=None, v0=None):
+    """Requested acceleration (m/s^2) of a Gipps (1981) driver.
+
+    Target speed after tau: the smaller of the free-road speed
+    v + 2.5 a_G tau (1 - v/v0) sqrt(0.025 + v/v0) and the highest speed from which the driver can still
+    stop behind a braking leader, -B tau + sqrt(B^2 tau^2 + B [2 (s - s_m) - v tau] + v_leader^2), with
+    B = |b_G| = |b_hat| and s the net gap. Project choice: the target is recomputed every simulation step
+    and the acceleration (target - v) / tau is applied (clipped to [amin, amax] by the caller). This keeps
+    Gipps's steady states, s = s_m + 1.5 tau v, but not his exact reaction-delay dynamics, so his
+    safe-stopping property is not assumed: without a safeguard, fast vehicles ran into slow vehicles that
+    had just merged (the model's gap check stopped those runs). The collision-avoidance floor used for
+    IDM+CAH is therefore applied here too (collision_floor)."""
+    c = c or Config()
+    v0 = c.v0 if v0 is None else v0
+    v, gap, leader_v = np.broadcast_arrays(np.asarray(v, float), np.asarray(gap, float), np.asarray(leader_v, float))
+    tau, B = c.gipps_tau, c.gipps_b
+    r = np.maximum(v / v0, 0.0)
+    v_free = v + 2.5 * c.gipps_a * tau * (1 - r) * np.sqrt(0.025 + r)
+    finite = np.isfinite(gap)
+    g = np.where(finite, gap, 0.0)
+    disc = B * B * tau * tau + B * (2 * (g - c.gipps_sm) - v * tau) + leader_v * leader_v
+    v_safe = np.maximum(-B * tau + np.sqrt(np.maximum(disc, 0.0)), 0.0)
+    target = np.where(finite, np.minimum(v_free, v_safe), v_free)
+    return collision_floor((target - v) / tau, v, np.where(finite, np.maximum(gap, 1e-9), 1.0), leader_v, finite, c)
+
+
+def follow(v, gap, lv, la, c, v0=None):
+    """The human driver's car-following acceleration on the mainline for the configured human model:
+    drive (IDM+CAH) or gipps. gap = inf: free road."""
+    if c.human_model == 'gipps':
+        return gipps(v, gap, lv, c, v0)
+    if c.human_model != 'idm':
+        raise ValueError("human_model must be 'idm' or 'gipps'")
+    return drive(v, gap, lv, la, c, v0)
 
 
 def acc_inputs(x, v, length):
@@ -295,7 +356,7 @@ def free_flow_time(v_entry, distance, c):
     """Travel time of a lone mainline IDM vehicle over `distance` from `v_entry`."""
     x, v, t = 0.0, float(v_entry), 0.0
     while x < distance:
-        a = float(np.clip(idm(v, c=c), c.amin, c.amax))
+        a = float(np.clip(follow(v, np.inf, 0.0, 0.0, c), c.amin, c.amax))
         dx, nv = motion(v, a, c.dt)
         dx, nv = float(dx), float(nv)
         if x + dx >= distance:
@@ -314,7 +375,7 @@ def ramp_free_time(c):
         if lane == 1 and x >= xs + c.length:
             lane = 0
         v0 = c.ramp_v0 if (lane == 1 and x < xs) else c.v0
-        a = float(np.clip(idm(v, c=c, v0=v0), c.amin, c.amax))
+        a = float(np.clip(follow(v, np.inf, 0.0, 0.0, c) if lane == 0 else idm(v, c=c, v0=v0), c.amin, c.amax))
         dx, nv = motion(v, a, c.dt)
         dx, nv = float(dx), float(nv)
         if x + dx >= c.road_end:
@@ -323,7 +384,9 @@ def ramp_free_time(c):
 
 
 def merge_test(car, L, F, c, xs):
-    """Safety test for a lane change from the acceleration lane. Returns (ok, s_l, s_f, a_self, a_f)."""
+    """Safety test for a lane change from the acceleration lane. Returns (ok, s_l, s_f, a_self, a_f).
+    The merging driver judges every gap with the IDM+CAH law, whatever the vehicles around it are
+    (ACC or, in the human-model check, Gipps drivers), so the gap-acceptance rule is the same in every case."""
     s_l = L['x'] - car['x'] - c.length if L else math.inf
     s_f = car['x'] - F['x'] - c.length if F else math.inf
     room = max(c.merge_x - c.end_margin - car['x'], 0.05)
@@ -439,6 +502,8 @@ def run(c, record=True):
         raise ValueError('invalid ramp geometry')
     if c.ramp_release_rate is not None and c.ramp_release_rate <= 0:
         raise ValueError('invalid ramp release rate')
+    if c.human_model not in ('idm', 'gipps') or min(c.gipps_a, c.gipps_b, c.gipps_tau) <= 0 or c.gipps_sm < 0:
+        raise ValueError('invalid human-driver model settings')
     if (not 0.0 <= c.acc_share <= 1.0 or min(c.acc_kp, c.acc_kv, c.acc_eta, c.acc_h) < 0
             or min(c.acc_takeover_b, c.acc_fallback_decel) <= 0):
         raise ValueError('invalid ACC settings')
@@ -654,7 +719,8 @@ def run(c, record=True):
             return True
         leader = min(ahead, key=lambda z: z['x'])
         gap = leader['x'] - x - c.length
-        return (gap >= c.s0 and float(idm(v, gap, leader['v'], c)) >= -c.entry_brake
+        a_in = follow(v, gap, leader['v'], 0.0, c) if lane is main and c.human_model != 'idm' else idm(v, gap, leader['v'], c)
+        return (gap >= c.s0 and float(a_in) >= -c.entry_brake
                 and gap >= c.s0 + max(0.0, (v * v - leader['v'] ** 2) / (-2 * c.amin)))
 
     steps = round(c.duration / c.dt)
@@ -746,8 +812,8 @@ def run(c, record=True):
                     old_gap = L['x'] - F['x'] - c.length if L else np.inf
                     # The merge rule judged the follower with the HDV law (a_f); the logged requests
                     # before and after the merge use the follower's own law.
-                    before = float(drive(F['v'], old_gap, L['v'] if L else 0.0, L.get('a', 0.0) if L else 0.0, c))
-                    after = a_f
+                    before = float(follow(F['v'], old_gap, L['v'] if L else 0.0, L.get('a', 0.0) if L else 0.0, c))
+                    after = a_f if c.human_model == 'idm' else float(follow(F['v'], s_f, car['v'], 0.0, c))
                     if F['type'] == 'ACC':
                         before = float(driver_takeover(acc_command(F['v'], old_gap, L['v'] if L else F['v'], c),
                                                        before, c)[0])
@@ -796,7 +862,7 @@ def run(c, record=True):
             if len(cars) > 1 and np.min(gap) <= 0:
                 raise AssertionError(f'overlap in lane {lane_id} at {t}')
             if lane_id == 0:
-                raw = drive(v, gap, lv, la, c)
+                raw = follow(v, gap, lv, la, c)
                 is_acc = np.array([z['type'] == 'ACC' for z in cars])
                 if is_acc.any():
                     s_acc, lv_acc = acc_inputs(x, v, c.length)      # onboard readings, same lane only

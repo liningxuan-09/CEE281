@@ -1,9 +1,9 @@
 #!/bin/sh
-# Reproduce comparison.json from the project folder (case A is reused from the main study).
+# Reproduce comparison.json from the project folder (each part takes about 1 minute on 4 cores).
+# Sensor delay 1.0 s. Needs the main study (case A is reused).
 cd "$(dirname "$0")/../../../.."
 D=results/acc_sensor_delay/delay_1.0s/eval_seeds_101-120
-A=results/acc_main/eval_seeds_101-120/comparison.json
-for S in 101-105 106-112 113-120; do
-  python3 -B acc_compare.py --set acc_sensor_delay=1.0 --a-from $A --seeds $S --save $D/parts/part_$S.json
+for S in 101-102 103-104 105-106 107-108 109-110 111-112 113-114 115-116 117-118 119-120; do
+  python3 -B acc_compare.py --set acc_sensor_delay=1.0 --a-from results/acc_main/eval_seeds_101-120/comparison.json --seeds $S --save $D/parts/part_$S.json
 done
-python3 -B acc_compare.py --merge $(for S in 101-105 106-112 113-120; do printf '%s ' $D/parts/part_$S.json; done) --save $D/comparison.json
+python3 -B acc_compare.py --merge $D/parts/part_*.json --save $D/comparison.json

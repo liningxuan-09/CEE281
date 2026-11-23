@@ -10,11 +10,11 @@ Mean total delay in veh·h; each row has its own paired baseline A.
 
 | Ramp peak (veh/h) | A | B25 | B50 | B75 |
 |---|---:|---:|---:|---:|
-| 350 | 8.3 | 8.2 | 8.2 | 7.7 |
-| 450 | 14.9 | 14.5 | 14.5 | 14.0 |
-| 550 | 32.5 | 26.2 | 24.9 | 24.4 |
+| 350 | 9.9 | 9.6 | 9.0 | 7.4 |
+| 450 | 17.1 | 15.6 | 14.7 | 12.8 |
+| 550 | 35.2 | 27.3 | 24.7 | 22.3 |
 
-At 550 veh/h, delay falls 19–25% with paired 95% intervals below zero, a larger benefit than predicted at B50. Lane-end stops fall from 13.6 per run in A to 2.3 / 0.9 / 0.0. At 350/450 veh/h, changes are smaller. Hard-braking merges increase at all three demands.
+Delay falls at every demand and share, and all paired 95% intervals are below zero: 3 / 9 / 25% at 350 veh/h, 9 / 14 / 25% at 450 and 23 / 30 / 37% at 550, a larger benefit than predicted. At 550 veh/h lane-end stops fall from 10.6 per run in A to 2.9 / 0.6 / 0.3. Hard-braking merges increase at all three demands.
 
 ## Reproduction
 
@@ -23,9 +23,7 @@ Run from the project root:
 ```bash
 sh results/acc_demand/peak_350/eval_seeds_101-120/run.sh
 sh results/acc_demand/peak_550/eval_seeds_101-120/run.sh
-python3 -B acc_figures.py --compare results/acc_demand/peak_350/eval_seeds_101-120/comparison.json \
-    results/acc_main/eval_seeds_101-120/comparison.json results/acc_demand/peak_550/eval_seeds_101-120/comparison.json \
-    --labels "ramp 350" "ramp 450" "ramp 550" --out results/acc_demand/demand_comparison.png
+sh make_figures.sh        # redraws the comparison figure
 ```
 
 Each `peak_*/eval_seeds_101-120/comparison.json` contains the full metrics and paired intervals. The main study must be available before drawing the comparison.

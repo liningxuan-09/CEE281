@@ -1,0 +1,102 @@
+{
+  "dt": 0.1,
+  "seeds": [
+    107,
+    108
+  ],
+  "cases": {
+    "A": {},
+    "ALINEA": {
+      "ramp_control": "alinea"
+    },
+    "B50": {
+      "acc_share": 0.5
+    }
+  },
+  "per_seed": {
+    "A": {
+      "107": {
+        "accumulated_delay_veh_s": 70967.67168054303,
+        "total_delay_main_veh_s": 36560.9089642918,
+        "total_delay_ramp_veh_s": 34406.76271640407,
+        "congestion_duration_s": 60.0,
+        "stops_at_lane_end": 7.0,
+        "downstream_flow_veh_h": 2077.714285714286,
+        "approach_speed_kmh": 69.73277758632665,
+        "merges": 225.0,
+        "min_net_gap_m": 1.0271076776530208,
+        "offered": 1390.0,
+        "exited": 1390.0
+      },
+      "108": {
+        "accumulated_delay_veh_s": 34008.83784369954,
+        "total_delay_main_veh_s": 29930.26476755947,
+        "total_delay_ramp_veh_s": 4078.573076141385,
+        "congestion_duration_s": 0.0,
+        "stops_at_lane_end": 0.0,
+        "downstream_flow_veh_h": 2082.8571428571427,
+        "approach_speed_kmh": 74.30610396818426,
+        "merges": 264.0,
+        "min_net_gap_m": 1.0752768362394818,
+        "offered": 1376.0,
+        "exited": 1376.0
+      }
+    },
+    "ALINEA": {
+      "107": {
+        "accumulated_delay_veh_s": 62157.704731432525,
+        "total_delay_main_veh_s": 35069.464201455536,
+        "total_delay_ramp_veh_s": 27088.240529997438,
+        "congestion_duration_s": 60.0,
+        "stops_at_lane_end": 0.0,
+        "downstream_flow_veh_h": 2115.4285714285716,
+        "approach_speed_kmh": 74.85532281923214,
+        "merges": 225.0,
+        "min_net_gap_m": 1.051375278766045,
+        "offered": 1390.0,
+        "exited": 1390.0
+      },
+      "108": {
+        "accumulated_delay_veh_s": 39907.285113707156,
+        "total_delay_main_veh_s": 28711.333131741438,
+        "total_delay_ramp_veh_s": 11195.951981972568,
+        "congestion_duration_s": 0.0,
+        "stops_at_lane_end": 0.0,
+        "downstream_flow_veh_h": 2082.8571428571427,
+        "approach_speed_kmh": 77.51704895613312,
+        "merges": 264.0,
+        "min_net_gap_m": 1.0160321584539815,
+        "offered": 1376.0,
+        "exited": 1376.0
+      }
+    },
+    "B50": {
+      "107": {
+        "accumulated_delay_veh_s": 61238.573678593,
+        "total_delay_main_veh_s": 56504.0374084827,
+        "total_delay_ramp_veh_s": 4734.536270113943,
+        "congestion_duration_s": 60.0,
+        "stops_at_lane_end": 0.0,
+        "downstream_flow_veh_h": 2112.0,
+        "approach_speed_kmh": 56.70295758558447,
+        "merges": 225.0,
+        "min_net_gap_m": 1.0546901816360332,
+        "offered": 1390.0,
+        "exited": 1390.0
+      },
+      "108": {
+        "accumulated_delay_veh_s": 34076.007291127215,
+        "total_delay_main_veh_s": 29562.97877200117,
+        "total_delay_ramp_veh_s": 4513.028519127863,
+        "congestion_duration_s": 0.0,
+        "stops_at_lane_end": 0.0,
+        "downstream_flow_veh_h": 2082.8571428571427,
+        "approach_speed_kmh": 65.8836938984193,
+        "merges": 264.0,
+        "min_net_gap_m": 1.423204968070877,
+        "offered": 1376.0,
+        "exited": 1376.0
+      }
+    }
+  }
+}

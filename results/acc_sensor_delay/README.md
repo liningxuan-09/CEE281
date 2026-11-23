@@ -8,11 +8,11 @@ Main ACC controller, baseline demand and seeds 101–120. Gap and leader speed a
 
 | Sensor delay | A | B25 | B50 | B75 |
 |---|---:|---:|---:|---:|
-| 0 s: total delay (veh·h) | 14.9 | 14.5 | 14.5 | 14.0 |
-| 0.5 s: total delay (veh·h) | 14.9 | 20.4 | 27.5 | 33.4 |
-| 1.0 s: total delay (veh·h) | 14.9 | 31.7 | 54.1 | 77.0 |
+| 0 s: total delay (veh·h) | 17.1 | 15.6 | 14.7 | 12.8 |
+| 0.5 s: total delay (veh·h) | 17.1 | 20.8 | 27.2 | 33.2 |
+| 1.0 s: total delay (veh·h) | 17.1 | 32.7 | 53.2 | 77.4 |
 
-Both delayed settings increase delay above A on every seed; paired 95% intervals exclude zero. At B50, delay is 1.8 and 3.6 times A, below the predicted magnitudes. A 10 m/s dip grows to 11.6 and 14.2 m/s in the 40-vehicle platoon test. The delay-free design is insufficient under these sensing delays. Sensor noise, dropouts and actuator lag are not tested here.
+Both delayed settings increase delay above A (on every seed, except B25 with 0.5 s: 18 of 20); paired 95% intervals exclude zero. At B50, delay is 1.6 and 3.1 times A, below the predicted magnitudes. With 1.0 s delay the queue still reaches the entrance on 2–3 seeds at B50/B75 (1 seed at B75 with 0.5 s). A 10 m/s dip grows to 11.6 and 14.2 m/s in the 40-vehicle platoon test. The delay-free design is insufficient under these sensing delays. Sensor noise, dropouts and actuator lag are not tested here.
 
 ## Reproduction
 

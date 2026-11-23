@@ -8,13 +8,18 @@ from dataclasses import replace
 import numpy as np
 
 from model import (Config, idm, drive, motion, continuous_min_gap, free_flow_time, merge_test, run, schedule,
-                   schedule_profile, acc_inputs, acc_command, driver_takeover, delayed_reading)
+                   schedule_profile, acc_inputs, acc_command, driver_takeover, delayed_reading, gipps, follow)
 
 
 def demand(main, ramp, end, **kw):
     """Config with constant mainline and ramp rates (veh/h) from 0 to end (s); 300 m acceleration lane
-    unless given (the scenarios below were set up for it)."""
+    and the short 2 km road (merge at 1.5 km, detectors at 0.5, 1.0, 1.4 and 1.6 km) unless given
+    (the scenarios below were set up for them)."""
     kw.setdefault('acc_length', 300.0)
+    kw.setdefault('road_end', 2000.0)
+    kw.setdefault('merge_x', 1500.0)
+    kw.setdefault('detectors', (500.0, 1000.0, 1400.0, 1600.0))
+    kw.setdefault('alinea_detector', 1400.0)
     kw.setdefault('seed', 5)
     return Config(main_profile=((0.0, float(end), float(main)),), ramp_profile=((0.0, float(end), float(ramp)),),
                   demand_end=float(end), **kw)
@@ -582,6 +587,76 @@ class ACCTests(unittest.TestCase):
         for kw in (dict(acc_share=1.5), dict(acc_share=-0.1), dict(acc_h=-1.0), dict(acc_takeover_b=0.0)):
             with self.assertRaises(ValueError):
                 run(demand(100, 100, 60, duration=120, **kw), False)
+
+
+
+class GippsTests(unittest.TestCase):
+    """Second human-driver model (human-model check)."""
+
+    def test_equilibrium_gap_is_sm_plus_one_and_a_half_tau_v(self):
+        c = Config()
+        for v in (5.0, 15.0, 30.0):
+            s = c.gipps_sm + 1.5 * c.gipps_tau * v
+            self.assertAlmostEqual(float(gipps(v, s, v, c)), 0.0, places=9)
+            self.assertLess(float(gipps(v, s - 2.0, v, c)), 0.0)
+            self.assertGreater(float(gipps(v, s + 2.0, v, c)), 0.0)
+
+    def test_free_road_term_and_desired_speed(self):
+        c = Config()
+        v = 10.0
+        expect = 2.5 * c.gipps_a * (1 - v / c.v0) * math.sqrt(0.025 + v / c.v0)
+        self.assertAlmostEqual(float(gipps(v, np.inf, 0.0, c)), expect, places=12)
+        self.assertAlmostEqual(float(gipps(c.v0, np.inf, 0.0, c)), 0.0, places=12)
+        self.assertLess(float(gipps(c.v0 + 2.0, np.inf, 0.0, c)), 0.0)
+        # With a far leader the free-road term decides.
+        self.assertAlmostEqual(float(gipps(v, 500.0, v, c)), expect, places=12)
+
+    def test_capacity_matches_idm(self):
+        """tau was chosen so that the Gipps capacity at v0 is about the IDM capacity."""
+        c = Config()
+        v = np.linspace(1.0, c.v0 - 0.01, 20000)
+        idm_cap = np.max(3600 * v / ((c.s0 + c.T * v) / np.sqrt(1 - (v / c.v0) ** c.delta) + c.length))
+        gipps_cap = 3600 * c.v0 / (c.length + c.gipps_sm + 1.5 * c.gipps_tau * c.v0)
+        self.assertAlmostEqual(c.length + c.gipps_sm, 6.5)
+        self.assertLess(abs(gipps_cap / idm_cap - 1), 0.01)
+
+    def test_follow_dispatches_on_the_human_model(self):
+        c = Config()
+        args = (20.0, 30.0, 18.0, 0.0)
+        self.assertEqual(float(follow(*args, c)), float(drive(*args, c)))
+        g = replace(c, human_model='gipps')
+        self.assertEqual(float(follow(*args, g)), float(gipps(20.0, 30.0, 18.0, g)))
+        with self.assertRaises(ValueError):
+            run(demand(100, 100, 60, duration=120, human_model='other'), False)
+        with self.assertRaises(ValueError):
+            run(demand(100, 100, 60, duration=120, human_model='gipps', gipps_tau=0.0), False)
+
+    def test_platoon_keeps_clearance_when_the_leader_brakes_hard(self):
+        c = replace(Config(), human_model='gipps')
+        n, v0 = 15, 25.0
+        x = -np.arange(n + 1) * (c.length + c.gipps_sm + 1.5 * c.gipps_tau * v0)
+        v, mingap = np.full(n + 1, v0), np.inf
+        for step in range(600):
+            gap = np.diff(-x) - c.length
+            a = np.clip(np.r_[c.amin if step < 80 else 0.0, gipps(v[1:], gap, v[:-1], c)], c.amin, c.amax)
+            a = np.where((v <= 0) & (a < 0), 0.0, a)
+            mingap = min(mingap, float(continuous_min_gap(gap, v[1:], a[1:], v[:-1], a[:-1], c.dt).min()))
+            dx, v = motion(v, a, c.dt)
+            x = x + dx
+        self.assertGreater(mingap, 0.5)
+        self.assertLess(float(v.max()), 0.5)        # the leader stopped and stays stopped; so does everyone
+
+    def test_gipps_runs_are_collision_free_and_conserve_vehicles(self):
+        for share in (0.0, 0.5):
+            s = run(demand(1500, 500, 300, duration=900, human_model='gipps', acc_share=share), False)['summary']
+            self.assertGreater(s['min_net_gap_m'], 0.0)
+            self.assertEqual(s['offered'], s['exited'] + s['remaining_on_road']
+                             + s['remaining_main_external'] + s['remaining_ramp_external'])
+
+    def test_default_human_model_is_idm(self):
+        c = demand(1500, 500, 300, duration=600)
+        self.assertEqual(run(c, False)['summary']['accumulated_delay_veh_s'],
+                         run(replace(c, human_model='idm'), False)['summary']['accumulated_delay_veh_s'])
 
 
 if __name__ == '__main__':

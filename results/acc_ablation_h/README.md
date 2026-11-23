@@ -8,12 +8,12 @@ Only `h` changes from the [main controller](../acc_main/README.md); gains, takeo
 
 | Measure, 20-seed mean | B25 | B50 | B75 |
 |---|---:|---:|---:|
-| Main h = 1.27 s: total delay (veh·h) | 14.5 | 14.5 | 14.0 |
-| h = 1.6881 s: total delay (veh·h) | 19.8 | 29.6 | 41.6 |
-| Change from main (veh·h), 95% interval | +5.3 [4.4, 6.2] | +15.2 [13.6, 16.7] | +27.6 [25.7, 29.6] |
-| h = 1.6881 s: largest entry queue (vehicles) | 26 | 64 | 106 |
+| Main h = 1.27 s: total delay (veh·h) | 15.6 | 14.7 | 12.8 |
+| h = 1.6881 s: total delay (veh·h) | 22.1 | 31.5 | 41.2 |
+| Change from main (veh·h), 95% interval | +6.5 [5.6, 7.4] | +16.8 [15.2, 18.5] | +28.5 [26.5, 30.5] |
+| h = 1.6881 s: largest entry queue (vehicles) | 15 | 47 | 91 |
 
-Baseline A is 14.9 veh·h. The larger time gap reduces nominal pure-ACC flow to about 1,740 veh/h; at the entry speed it is about 1,640 veh/h, below mainline demand. Delay therefore accumulates at the entrance. The predicted direction holds; B50 delay is 2.0 times A.
+Baseline A is 17.1 veh·h. The larger time gap reduces nominal pure-ACC flow to about 1,740 veh/h; at the entry speed it is about 1,640 veh/h, below mainline demand. Delay therefore accumulates at the entrance. The predicted direction holds (delay rises on 19–20 of 20 seeds); B50 delay is 1.8 times A.
 
 ## Reproduction
 
@@ -21,9 +21,7 @@ Run the main study first, then from the project root:
 
 ```bash
 sh results/acc_ablation_h/h_1.69/eval_seeds_101-120/run.sh
-python3 -B acc_figures.py --compare results/acc_main/eval_seeds_101-120/comparison.json \
-    results/acc_ablation_h/h_1.69/eval_seeds_101-120/comparison.json --labels "h = 1.27 s" "h = 1.6881 s" \
-    --out results/acc_ablation_h/ablation_h_comparison.png
+sh make_figures.sh        # redraws the comparison figure
 ```
 
 Full metrics and intervals: `h_1.69/eval_seeds_101-120/comparison.json`.

@@ -97,7 +97,7 @@ def table(rows):
         add('Time with cars waiting off the ramp, no control / ALINEA (min)', lambda r: f"{r['none']['spillback_min']:.1f} / {r['alinea']['spillback_min']:.1f}")
         add('Stops at the lane end per run, no control / ALINEA', lambda r: f"{r['none']['stops_at_lane_end']:.1f} / {r['alinea']['stops_at_lane_end']:.1f}")
         add('Hard braking (> 3 m/s²) after merges per run, no control / ALINEA', lambda r: f"{r['none']['hard_braking']:.1f} / {r['alinea']['hard_braking']:.1f}")
-        add('Discharge flow at 1.6 km, no control / ALINEA (veh/h)', lambda r: f"{r['none']['discharge_flow_veh_h']:,.0f} / {r['alinea']['discharge_flow_veh_h']:,.0f}")
+        add('Discharge flow at 2.6 km, no control / ALINEA (veh/h)', lambda r: f"{r['none']['discharge_flow_veh_h']:,.0f} / {r['alinea']['discharge_flow_veh_h']:,.0f}")
         add('Vehicles left at the end, no control / ALINEA', lambda r: f"{r['none']['remaining_vehicles']:.1f} / {r['alinea']['remaining_vehicles']:.1f}")
         lines.append('')
     return '\n'.join(lines)
@@ -113,13 +113,14 @@ def figure(rows, path):
                          'xtick.color': INK2, 'ytick.color': INK2, 'axes.spines.top': False,
                          'axes.spines.right': False})
     fig, ax = plt.subplots(3, 2, figsize=(12, 11), sharey='row', facecolor=SURF,
-                           gridspec_kw=dict(hspace=0.5, wspace=0.08))
-    for j, (step, title, key) in enumerate((('ramp', 'Step 1: ramp peak demand (mainline 1,700)', 'ramp_peak_veh_h'),
-                                            ('main', 'Step 2: mainline demand (ramp peak 450)', 'mainline_veh_h'))):
+                           gridspec_kw=dict(hspace=0.62, wspace=0.08))
+    for j, (step, title, key) in enumerate((('ramp', 'Ramp demand changed (mainline fixed at 1,700 veh/h)', 'ramp_peak_veh_h'),
+                                            ('main', 'Mainline demand changed (ramp peak fixed at 450 veh/h)', 'mainline_veh_h'))):
         rs = [r for r in rows if r['step'] == step]
         x = np.arange(len(rs))
-        labels = [f"{r[key]:,}" + ('\nbaseline' if r['no_control'] == 'A' else '') + f"\n{100 * r['peak_demand_over_capacity']:.0f}% of cap."
-                  for r in rs]
+        base = [f"{r[key]:,}" + (' (baseline)' if r['no_control'] == 'A' else '') for r in rs]
+        labels = [f"{b}\n{100 * r['peak_demand_over_capacity']:.0f}% of capacity" for b, r in zip(base, rs)]
+        xlabel = ('Mainline demand (veh/h)' if step == 'main' else 'Ramp peak demand (veh/h)')
         # Row 1: total delay, no control vs ALINEA.
         a = ax[0, j]
         for tag, col, name, ls in (('none', C_NONE, 'No control', '--'), ('alinea', C_ALINEA, 'ALINEA', '-')):
@@ -127,7 +128,8 @@ def figure(rows, path):
             a.plot(x, y, ls, color=col, lw=2, marker='o', ms=8, mec=SURF, mew=2, label=name, zorder=3)
             a.annotate(f'{y[-1]:.0f}', (x[-1], y[-1]), xytext=(8, 0), textcoords='offset points', va='center', color=INK2, fontsize=9)
         a.set_title(title, loc='left', fontsize=11, color=INK, fontweight='bold', pad=22)
-        a.text(0, 1.04, 'Total delay (veh·h), mean of 20 seeds', transform=a.transAxes, color=INK2, fontsize=9)
+        a.text(0, 1.04, 'Total delay per run (veh·h), mean of 20 seeds', transform=a.transAxes, color=INK2, fontsize=9)
+        a.set_xlabel(xlabel, color=INK2, fontsize=9)
         # Row 2: change with ALINEA (paired, 95% CI).
         a = ax[1, j]; w = 0.26
         for k, (comp, col, name) in enumerate((('main', C_MAIN, 'Mainline'), ('ramp', C_RAMP, 'Ramp'), ('total', C_TOTAL, 'Total'))):
@@ -136,26 +138,34 @@ def figure(rows, path):
             a.bar(x + (k - 1) * w, m, w - 0.03, color=col, label=name, zorder=2)
             a.errorbar(x + (k - 1) * w, m, yerr=[m - lo, hi - m], fmt='none', ecolor=INK, elinewidth=1, capsize=3, zorder=3)
         a.axhline(0, color=INK2, lw=1)
-        a.text(0, 1.04, 'ALINEA − no control, delay change (veh·h), 95% interval', transform=a.transAxes, color=INK2, fontsize=9)
+        a.text(0, 1.04, 'Change in delay with ALINEA (veh·h); below 0: ALINEA is better', transform=a.transAxes, color=INK2, fontsize=9)
+        a.set_xlabel(xlabel, color=INK2, fontsize=9)
         # Row 3: ramp queue.
         a = ax[2, j]
         for tag, col, name, ls in (('none', C_NONE, 'No control', '--'), ('alinea', C_ALINEA, 'ALINEA', '-')):
             y = [r[tag]['max_ramp_queue_mean'] for r in rs]
             a.plot(x, y, ls, color=col, lw=2, marker='o', ms=8, mec=SURF, mew=2, label=name, zorder=3)
         a.axhline(STORAGE, color=INK2, lw=1, ls=':')
-        a.text(x[0] - 0.45, STORAGE + 1.5, f'ramp road holds {STORAGE} cars', fontsize=8.5, color=INK2, va='bottom')
-        a.text(0, 1.04, 'Max cars before the stop line, mean of 20 seeds', transform=a.transAxes, color=INK2, fontsize=9)
-        ax[2, j].set_xticks(x, [f"{r[key]:,}\nALINEA queue > {STORAGE}\non {r['alinea']['overflow_seeds']}/20 seeds" for r in rs])
+        a.text(x[0] - 0.45, STORAGE + 1.5, f'the ramp holds {STORAGE} vehicles', fontsize=8.5, color=INK2, va='bottom')
+        a.text(0, 1.04, 'Longest ramp queue in a run (vehicles), mean of 20 seeds\n'
+               'Purple numbers: seeds with an ALINEA queue above the ramp storage', transform=a.transAxes, color=INK2, fontsize=9)
+        for xi, r in zip(x, rs):
+            a.text(xi, 0.97, f"{r['alinea']['overflow_seeds']} of 20", transform=a.get_xaxis_transform(), ha='center', va='top',
+                   fontsize=9.5, color=C_ALINEA, fontweight='bold')
+        ax[2, j].set_xticks(x, base)
         for i in range(3):
             if i < 2:
-                ax[i, j].set_xticks(x, labels)
+                ax[i, j].set_xticks(x, labels if i == 0 else base)
             ax[i, j].set_xlim(-0.5, len(rs) - 0.5)
             ax[i, j].grid(axis='y', color=GRID, lw=0.8, zorder=0); ax[i, j].set_facecolor(SURF)
-        ax[2, j].set_xlabel('mainline veh/h' if step == 'main' else 'ramp peak veh/h', color=INK2)
+        ax[2, j].set_xlabel(xlabel, color=INK2, fontsize=9)
     ax[0, 0].legend(frameon=False, loc='upper left', handlelength=3.5); ax[1, 0].legend(frameon=False, loc='lower left', ncol=3)
-    ax[2, 0].set_ylim(0, None)
-    fig.suptitle('TMC changed-demand test: ALINEA vs no control, 20 evaluation seeds (101–120)',
-                 x=0.06, ha='left', fontsize=14, fontweight='bold', color=INK)
+    ax[2, 0].set_ylim(0, None); ax[2, 0].legend(frameon=False, loc='center left', handlelength=3.5)
+    ax[2, 0].set_ylim(0, ax[2, 0].get_ylim()[1] * 1.22)
+    fig.suptitle('ALINEA against no control when demand changes, 20 evaluation seeds (101–120)',
+                 x=0.06, y=0.985, ha='left', fontsize=14, fontweight='bold', color=INK)
+    fig.text(0.06, 0.945, 'Under each demand in the top row: peak demand after the merge as a share of the lane capacity (2,190 veh/h). '
+             'Whiskers in the middle row: 95% interval of the paired change.', ha='left', fontsize=9.5, color=INK2)
     fig.savefig(path, dpi=150, facecolor=SURF, bbox_inches='tight')
 
 

@@ -11,18 +11,20 @@ Each vehicle stores an ID, its origin (`0` = mainline demand, `1` = ramp demand)
 ## Geometry
 
 ```text
- mainline entry (25 m/s)                acceleration lane                 exit
- 0 ───────────────────────────────────── 1.2 ══════════════ 1.5 ─────────── 2.0 km
-                                        /  (lane 1, beside lane 0)
-                    ramp road 200 m    /
-           ramp entrance (1.0 km) ────┘   detectors: 0.5, 1.0, 1.4, 1.6 km and the exit
+ mainline entry (25 m/s)                           acceleration lane             exit
+ 0 ──────────────────────────────────────────────── 2.05 ═══════════ 2.5 ──────── 3.0 km
+                                                   /  (lane 1, beside lane 0)
+                             ramp road 200 m      /
+                  ramp entrance (1.85 km) ───────┘     detectors: 1.5, 2.0, 2.4, 2.6 km and the exit
 ```
+
+The mainline runs 2.05 km before the acceleration lane. With the earlier 1.05 km, queues in the ACC cases reached the entrance and vehicles waiting to enter added delay there; with 2.05 km no queue reaches the entrance in the main study (longest queue about 0.9 km on average). Queues still fill the road in the unstable k_v ablation, with a = 1.4 m/s² and on a few seeds with a 1.0 s sensor delay.
 
 | Field | Default | Meaning |
 |---|---:|---|
-| `road_end` | 2000 m | mainline exit |
-| `merge_x` | 1500 m | end of the acceleration lane |
-| `acc_length` | 450 m | acceleration lane length (from 1050 m) |
+| `road_end` | 3000 m | mainline exit |
+| `merge_x` | 2500 m | end of the acceleration lane |
+| `acc_length` | 450 m | acceleration lane length (from 2050 m) |
 | `ramp_length` | 200 m | ramp road before the acceleration lane; no lane change allowed there |
 | `ramp_entry_speed`, `ramp_v0` | 60 km/h | entry speed and desired speed on the ramp road |
 
@@ -58,7 +60,26 @@ Kesting, Treiber & Helbing (2010). A cut-in at a short gap that is not closing g
 
 Applied acceleration is clipped to [−4, +2] m/s².
 
-**Why a = 2.0 and T = 1.2 s.** IDM with a = 1.4 m/s² is string-unstable below about 60 km/h. A slowdown at the merge then grew into stop-and-go waves below 30 km/h, which is unrealistic for one freeway lane at this demand. With a = b = 2.0 m/s², platoons are string-stable at all speeds. T = 1.2 s raises single-lane capacity to about 2,190 veh/h, so that realistic demand gives a merge bottleneck rather than a capacity jam.
+**Why a = 2.0 and T = 1.2 s.** With the literature value a = 1.4 m/s² IDM platoons are string-unstable at low speed, and in the merge simulation the slowdowns built up into a queue that filled the mainline (total delay about three times higher on all 20 evaluation seeds), which is unrealistic for one freeway lane at this demand. With a = b = 2.0 m/s², disturbances fade at every speed. T = 1.2 s raises single-lane capacity to about 2,190 veh/h, so that realistic demand gives a merge bottleneck rather than a capacity jam.
+
+## Second human-driver model: Gipps (`human_model = 'gipps'`)
+
+Used only in the human-model check (`results/human_model_gipps`). Each step the driver's target speed after τ is the smaller of
+
+    v_free = v + 2.5 a_G τ (1 − v/v0) √(0.025 + v/v0)
+    v_safe = −B τ + √(B² τ² + B [2 (s − s_m) − v τ] + v_leader²),   B = |b_G| = |b̂|
+
+and the acceleration (target − v)/τ is applied within the common limits [−4, +2] m/s². s is the net gap.
+
+| Parameter | Value | Source |
+|---|---|---|
+| a_G | 1.7 m/s² | Gipps (1981), average |
+| b_G = b̂ | −3.4 m/s² (= −2 a_G) | Gipps (1981), average; b̂ = b_G is a project choice (his rule: min{−3, (b_G − 3)/2}) |
+| s_m | 1.5 m | so that length + s_m = 6.5 m, Gipps's average effective length |
+| τ | 0.97 s | project choice (Gipps: 2/3 s): capacity at v0, v0/(6.5 + 1.5 τ v0) = 2,180 veh/h, matches the IDM capacity |
+| v0 | 120 km/h | common desired speed |
+
+Steady-state gap: s = s_m + 1.5 τ v. Project choices: (1) the target is recomputed every step instead of once per reaction time, so Gipps's steady states are kept but not his reaction-delay dynamics or his safe-stopping guarantee; (2) the collision-avoidance floor of IDM+CAH is applied as well (`collision_floor`); (3) Gipps replaces only the mainline following law (`follow`), the mainline entry test and the mainline free-flow reference time. The ramp road, the acceleration-lane manoeuvre and the gap-acceptance rule (`merge_test`, judged with IDM+CAH) are the same in every case, and ACC vehicles keep the ACC law with Gipps as the driver's own law in a takeover.
 
 ## ACC vehicles
 
@@ -155,7 +176,7 @@ Arrivals are Poisson with a piecewise-constant rate (`schedule_profile`); the tw
 
 ## Feasibility check (`feasibility.py`)
 
-*Designed for the earlier default (1,700 + 500 veh/h, 300 m lane) and not rerun for the current one. The current default was chosen instead by a demand sweep on the development seeds (450 m lane): 1,700 + 450 veh/h gives a clear bottleneck without control (approach about 30 km/h slower than upstream, 4–5 min congested on average) and an ALINEA that restricts the ramp in most peak cycles, while only a few ramp vehicles stop at the lane end (0.75 per run on the development seeds). 1,600 + 350 veh/h removed the stops but also the bottleneck, so ALINEA hardly acted.*
+*The current default (1,700 + 450 veh/h, 450 m lane) was chosen by a demand sweep on the development seeds: it gives a clear bottleneck without control and an ALINEA that restricts the ramp in about a third of the peak cycles; 1,600 + 350 veh/h removed the bottleneck. A few ramp vehicles waiting at the lane end are accepted, so lane-end stops are reported but are not a criterion. Result with the current settings (16 Nov 2026, `results/baseline/feasibility.json`): 7 of 13 development seeds, including the demonstration seed 9, meet every seed criterion; 5 show too weak a bottleneck (approach less than 10 km/h slower than downstream) and 1 has too many speeds below 30 km/h. On average the approach is about 30 km/h slower than upstream (72 against 101 km/h). The single-seed time-step criterion is not met for seed 9 (approach speed 68 km/h with dt = 0.1 s, 38 km/h with 0.05 s): individual runs of the uncontrolled case are sensitive to the step, which the 20-seed check in `results/time_step` quantifies.*
 
 Criteria fixed in advance, checked for the selected seed and reported for 13 development seeds:
 
@@ -163,11 +184,10 @@ Criteria fixed in advance, checked for the selected seed and reported for 13 dev
 - **recovery:** downstream (200–500 m after the merge) ≥ 10 km/h faster than the approach;
 - **local:** upstream ≥ 85 km/h and queue extent ≤ 1 km;
 - **realistic:** ≤ 5% of mainline 1 s samples below 30 km/h in the evaluation window;
-- **no stranding:** no stop at the lane end;
 - **ramp entry:** wait at the ramp entrance ≤ 30 s;
 - **no-ramp control:** never congested, and no cell before the merge below 70 km/h;
 - **cleared:** all vehicles leave;
-- **time step:** with dt = 0.05 s, the selected seed's approach speed changes by < 5 km/h and total delay by < 10%.
+- **time step:** with dt = 0.05 s, the selected seed's approach speed changes by < 5 km/h and total delay by < 10%. The 20-seed check for A, ALINEA and B50 is in `results/time_step` (`dt_check.py`): total delay changes by −1% to +4%, but in case A fewer ramp vehicles stop at the lane end with the smaller step, which moves delay from the ramp to the mainline.
 
 ## Metrics
 
@@ -189,18 +209,18 @@ Bottleneck indicators over the evaluation window (300–2400 s):
   - approach: last 500 m before the end of the acceleration lane;
   - downstream: 200 to 500 m after it.
 - **Speed variability:** standard deviation of the same samples per section.
-- **Discharge flow** at the first detector downstream (1.6 km).
+- **Discharge flow** at the first detector downstream (2.6 km).
 - **Congestion duration:** 30 s bins in which the approach averages below `congested_kmh` (40 km/h).
 - **Queue extent:** distance from the merge to the farthest congested 100 m cell (30 s × 100 m cells).
 - Both use only the 30 s bins inside the window, like the speeds and flows. The whole run is reported separately for reference (`congestion_duration_full_run_s`, `max_queue_extent_full_run_m`); it also covers the queue dissolving after demand ends. *Changed 1 Nov 2026:* both previously covered the whole run (baseline seed 105: 570 s reported, 420 s inside the window).
 - **Merges:** count, mean speed and position on the lane, followers that had to brake (with the follower's own law), stops at the lane end.
-- **Discharge while active** (`discharge_flow_active_veh_h`): flow at 1.6 km during the 30 s bins in which the approach averages below 40 km/h (`bottleneck_active_bins`).
-- **Disturbance ratio:** speed SD 300–500 m upstream of the acceleration lane (0.55–0.75 km) ÷ speed SD alongside it (1.05–1.5 km). Below 1, merge disturbances fade upstream; above 1, they grow.
+- **Discharge while active** (`discharge_flow_active_veh_h`): flow at 2.6 km during the 30 s bins in which the approach averages below 40 km/h (`bottleneck_active_bins`).
+- **Disturbance ratio:** speed SD 300–500 m upstream of the acceleration lane (1.55–1.75 km) ÷ speed SD alongside it (2.05–2.5 km). Below 1, merge disturbances fade upstream; above 1, they grow.
 - **ACC:** equipped vehicles per stream, ACC time on the mainline, takeover episodes and time, braking harder than 3 m/s² by type, smallest within-step gap by follower type, delay by type.
 
 ## Observation and TMC (`tmc_alinea` run)
 
-**Detector reports.** Every `report_interval` (30 s) each mainline detector at 0.5, 1.0, 1.4 and 1.6 km reports, in the guide's observation format:
+**Detector reports.** Every `report_interval` (30 s) each mainline detector at 1.5, 2.0, 2.4 and 2.6 km reports, in the guide's observation format:
 
 | Field | Meaning |
 |---|---|
@@ -221,11 +241,11 @@ estimate  Q_hat = cum(RAMP_IN) - cum(RAMP_OUT)        vehicles waiting at the me
 predict   Q_hat(t+H) = max(0, Q_hat + H (q_in - q_out)), H = 60 s, rates = mean of the last 4 reports
           (advisory only; compared with the persistence forecast Q_hat(t+H) = Q_hat)
 decide    mode, in this order:
-            fallback  no valid occupancy report for more than 60 s  -> r = 500 veh/h
-            override  only if ramp_storage is set (off by default; ablation): Q_hat > ramp_storage -> r = rate_max
+            fallback  no valid occupancy report for more than 60 s  -> r = 400 veh/h
+            override  only if ramp_storage is set (off by default, not used in any experiment): Q_hat > ramp_storage -> r = rate_max
             hold      this report missing, last one recent          -> r unchanged
             alinea    r = clip(r_prev + K_R (o* - o_1.4km), 200, 900 veh/h)
-act       signal at the stop line (end of the ramp road, 1.05 km): cycle = 3600 / r s (4-18 s); each cycle
+act       signal at the stop line (end of the ramp road, 2.05 km): cycle = 3600 / r s (4-18 s); each cycle
           starts with a green of meter_green = 2 s in which the first waiting vehicle within 30 m of the
           line may go (one car per green), then red (at least meter_min_red = 2 s); an unused green is
           lost; at r = rate_max the signal rests in green (no restriction); a vehicle is committed to pass only once it
@@ -236,13 +256,13 @@ evaluate  one row per cycle in result['tmc'] (true queue and occupancy logged fo
 
 | Parameter | Value | Source |
 |---|---:|---|
-| `alinea_detector` | 1400 m | Chosen with the earlier 300 m lane and 1,700 + 500 veh/h, kept unchanged. Downstream of most merges: merges spread along the acceleration lane (mean 1.33 km, middle half 1.21–1.44 km). Its 30 s flow-occupancy data show the congested branch (about 2,070 veh/h at 12–16%, about 1,750 veh/h above 24%), whereas the 1.6 km detector never exceeds 17% and stays in free flow, so ALINEA there hardly ever restricts the ramp (development seeds: below ramp demand in 0–30% of peak cycles vs. 23–62% at 1.4 km) |
-| o* (`alinea_target_occ`) | 0.14 | ≈ 0.9 × critical occupancy. IDM equilibrium: capacity 2,190 veh/h at 70 km/h, o_cr = q ℓ / v = 15.6%. In the first acceleration-lane run (300 m lane, 1,700 + 500 veh/h) the 1.6 km reports showed peak-period occupancy 14–17% with flows of 2,140–2,230 veh/h |
+| `alinea_detector` | 2400 m (100 m before the lane end) | Checked with the current settings on 13 development seeds without control: merges spread along the acceleration lane (median 2.11 km, middle half 2.06–2.43 km), so 70% happen before the detector. Its 30 s flow-occupancy data show both branches: flow rises to about 2,130 veh/h at 14–20% occupancy and falls to about 2,000 veh/h at 20–24% and 1,730 veh/h above 24%. The detector at 2.6 km never exceeds 17% and stays in free flow; with ALINEA there the ramp is restricted in 26% of the peak cycles instead of 33% and mainline delay is not reduced (9.4 against 9.5 veh·h without control; 8.6 with the detector at 2.4 km) |
+| o* (`alinea_target_occ`) | 0.14 | ≈ 0.9 × critical occupancy. IDM equilibrium: capacity 2,190 veh/h at 70 km/h, o_cr = q ℓ / v = 15.6%. Measured at the 2.4 km detector with the current settings: flow is highest for 14–20% occupancy and falls above 20%, so 14% is at the lower edge of the capacity range |
 | K_R (`alinea_gain`) | 70 veh/h per % | Papageorgiou et al. (1991) |
 | `rate_min`, `rate_max` | 200, 900 veh/h | 900 veh/h = shortest signal cycle 4 s (green 2 s + red 2 s), the usual practical maximum of a single-lane, one-car-per-green meter; 200 veh/h = 18 s cycle |
 | `meter_green`, `meter_min_red` | 2 s, 2 s | signal timing of a one-car-per-green meter: a short green for one vehicle, then red |
-| `ramp_storage` | None (no override) | Earlier demand, development seeds: an override at 20 or 28 vehicles flushes the queued vehicles as a platoon that then strands on the acceleration lane, and it removes most of the benefit. The street is not modelled, so spillback is reported instead (`ramp_spillback_s`, `max_ramp_external`, `ramp_overflow_s` against the ramp's capacity of 28 stopped vehicles). The override is kept as an ablation. |
-| `report_stale`, `fallback_rate` | 60 s, 500 veh/h | project choice; set for the earlier 500 veh/h ramp peak, slightly above the current 450 veh/h peak |
+| `ramp_storage` | None (no override) | The street is not modelled, so spillback is reported instead (`ramp_spillback_s`, `max_ramp_external`, `ramp_overflow_s` against the ramp's capacity of 28 stopped vehicles). A queue override exists in the code but is off and was not evaluated. |
+| `report_stale`, `fallback_rate` | 60 s, 400 veh/h | project choice: just below the 450 veh/h ramp peak, so that without reports the meter still meters and the queue grows by at most 50 veh/h (about 4 vehicles in a 5 min outage). The earlier 500 veh/h was above the ramp peak and did not restrict at all. On the development seeds the choice changes total delay in the 5 min outage test by 0.7 veh·h |
 
 **Detector defects** (off by default; observation tests). `detector_miss_prob`: each passage is missed with this probability; a missed vehicle adds nothing to count, occupancy or speed, and the ramp counters lose it. `occupancy_noise_sd`: Gaussian noise added to reported occupancy (clipped to [0, 1]). `report_delay`: reports reach the TMC this many seconds after their interval ends, so the controller acts on older data; the stale-data limit is extended by the delay. `report_dropout`: reports lost in time windows. Every report also carries the true count and occupancy (`count_true`, `occupancy_true`) for scoring only. Error measures in the summary: `detector_count_error_veh` (mean absolute count error per 30 s at the ALINEA detector), `detector_occupancy_mae`, `queue_estimate_mae_veh` (estimate vs. true queue at the data time). The queue estimate is clipped at zero. Detector errors use their own random stream, so traffic is unchanged.
 
@@ -252,7 +272,7 @@ When the rate changes, the next green starts 3600 / r after the start of the las
 
 ## Persistence boundary
 
-`model.run()`, `validate.validate()` and `feasibility.feasibility()` return dictionaries and never write files. Only `run_demo.py --save` (through `present.render()` and `make_gif.make()`), `validate.py --save` and `feasibility.py --save` write to disk.
+`model.run()` and `feasibility.feasibility()` return dictionaries and never write files. Only `run_demo.py --save` (through `present.render()` and `make_gif.make()`), `feasibility.py --save` and the experiment scripts with `--save` or `--out` write to disk.
 
 ## Known limitations
 
@@ -262,4 +282,4 @@ When the rate changes, the next green starts 3600 / r after the start of the las
 - Merge thresholds, ramp speeds, a and T are project choices for a realistic baseline, not calibrated to a site.
 - Detectors are ideal point detectors unless a defect is switched on (missed passages, occupancy noise, delayed or lost reports; all tested). Speed noise and placement errors are not modelled.
 - ACC readings are exact; the takeover is a project rule. The main controller's k_v is a design value, not a measured one. Gunter et al. fitted their law to small oscillations at highway speed.
-- Gipps is not modelled yet (planned as the second human-driver model).
+- Gipps is modelled with simplified dynamics (see above) and only as a sensitivity check.

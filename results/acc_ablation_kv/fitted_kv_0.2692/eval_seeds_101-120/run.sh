@@ -1,9 +1,9 @@
 #!/bin/sh
-# Reproduce comparison.json from the project folder (each part takes about 2 minutes on 4 cores).
+# Reproduce comparison.json from the project folder (each part takes about 1 minute on 4 cores).
+# k_v ablation: the fitted gain k_v = 0.2692.
 cd "$(dirname "$0")/../../../.."
 D=results/acc_ablation_kv/fitted_kv_0.2692/eval_seeds_101-120
-python3 -B acc_compare.py --controller gunter --seeds 101-105 --save $D/parts/part_101-105.json
-python3 -B acc_compare.py --controller gunter --seeds 106-110 --save $D/parts/part_106-110.json
-python3 -B acc_compare.py --controller gunter --seeds 111-115 --save $D/parts/part_111-115.json
-python3 -B acc_compare.py --controller gunter --seeds 116-120 --save $D/parts/part_116-120.json
-python3 -B acc_compare.py --merge $D/parts/part_101-105.json $D/parts/part_106-110.json $D/parts/part_111-115.json $D/parts/part_116-120.json --save $D/comparison.json
+for S in 101-102 103-104 105-106 107-108 109-110 111-112 113-114 115-116 117-118 119-120; do
+  python3 -B acc_compare.py --controller gunter --seeds $S --save $D/parts/part_$S.json
+done
+python3 -B acc_compare.py --merge $D/parts/part_*.json --save $D/comparison.json

@@ -12,15 +12,21 @@ Means over seeds; total-delay changes are paired differences from A with 95% int
 
 | Measure | A | B25 | B50 | B75 |
 |---|---:|---:|---:|---:|
-| Total delay (veh·h) | 14.9 | 14.5 | 14.5 | 14.0 |
-| Change from A (veh·h), 95% interval | — | −0.39 [−1.60, +0.61] | −0.40 [−1.92, +0.86] | −0.84 [−2.45, +0.47] |
-| Mainline / ramp delay (veh·h) | 9.9 / 5.0 | 12.0 / 2.4 | 13.2 / 1.2 | 13.1 / 0.9 |
-| Congested time (s) | 251 | 297 | 89 | 12 |
-| Disturbance ratio | 0.49 | 0.94 | 1.17 | 1.04 |
-| Lane-end stops per run | 3.8 | 2.8 | 0.3 | 0.0 |
-| Hard-braking merges per run | 30 | 81 | 85 | 91 |
+| Total delay (veh·h) | 17.1 | 15.6 | 14.7 | 12.8 |
+| Change from A (veh·h), 95% interval | — | −1.51 [−3.03, −0.27] | −2.44 [−3.96, −0.98] | −4.33 [−6.16, −2.63] |
+| Change from A (%) | — | −9% | −14% | −25% |
+| Mainline / ramp delay (veh·h) | 11.4 / 5.7 | 13.9 / 1.7 | 13.4 / 1.2 | 11.9 / 0.9 |
+| Congested time (s) | 243 | 344 | 89 | 11 |
+| Disturbance ratio | 0.57 | 0.91 | 1.18 | 1.18 |
+| Longest queue (m) | 540 | 930 | 915 | 590 |
+| Lane-end stops per run | 4.3 | 1.5 | 0.5 | 0.0 |
+| Hard-braking merges per run | 32 | 82 | 90 | 103 |
 
-Total-delay intervals include zero; this does not establish equivalence. At B50/B75, local congestion decreases, delay shifts from ramp to mainline, and hard-braking merges increase. The B25 disturbance ratio exceeds the pre-run expectation. All trips finish within 60 min.
+Total delay falls at every share and all three intervals are below zero; the pre-run prediction of "near A" does not hold. The saving comes from the ramp (ramp delay falls 70–84%, lane-end stops disappear), while mainline delay rises at B25/B50 and hard-braking merges triple. Disturbances travel further upstream (ratio above 1 at B50/B75), but no queue reaches the entrance in any case. All trips finish within 60 min.
+
+**Effect of the road length.** With the earlier 2 km road (1.05 km before the acceleration lane) the same study gave −3%, −3% and −6% with intervals that included zero: queues in the ACC cases reached the entrance, and vehicles waiting to enter added delay that hid the saving. The mainline now runs 2.05 km before the lane.
+
+**Time step.** The total-delay result is the same with dt = 0.05 s (B50: −2.4 veh·h at both steps), but the split between mainline and ramp delay in case A is not ([time_step](../time_step/README.md)).
 
 ## Reproduction
 
@@ -28,8 +34,8 @@ Run from the project root:
 
 ```bash
 sh results/acc_main/eval_seeds_101-120/run.sh
-python3 -B acc_figures.py results/acc_main/eval_seeds_101-120/comparison.json --seed 110
+python3 -B acc_figures.py results/acc_main/eval_seeds_101-120/comparison.json
 python3 -B acc_mechanism.py
 ```
 
-`comparison.json` stores all metrics and paired intervals; `acc_summary.png` is the summary figure. Use `python3 -B report_sync_figures.py` for the current report's 0–45 min trajectories. See [speed-gain ablation](../acc_ablation_kv/README.md), [sensor delay](../acc_sensor_delay/README.md) and [demand](../acc_demand/README.md).
+`comparison.json` stores all metrics and paired intervals; `acc_summary.png` is the summary figure. See [speed-gain ablation](../acc_ablation_kv/README.md), [sensor delay](../acc_sensor_delay/README.md) and [demand](../acc_demand/README.md).

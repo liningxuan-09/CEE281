@@ -40,9 +40,6 @@ CASES = {
     'A': {},                                                   # unmetered all-HDV baseline
     'A-ALINEA': {'ramp_control': 'alinea'},
     'A-ALINEA-fault': {'ramp_control': 'alinea', 'report_dropout': ((1200.0, 1500.0),)},  # 5 min of lost reports
-    # Ablation: queue override that protects the street (max rate above this many vehicles before the line).
-    'A-ALINEA-ovr20': {'ramp_control': 'alinea', 'ramp_storage': 20},
-    'A-ALINEA-ovr28': {'ramp_control': 'alinea', 'ramp_storage': 28},
     # Detector defects (observation tests).
     'A-ALINEA-miss2': {'ramp_control': 'alinea', 'detector_miss_prob': 0.02},
     'A-ALINEA-noise2': {'ramp_control': 'alinea', 'occupancy_noise_sd': 0.02},
@@ -125,7 +122,7 @@ def merge(files):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--seeds', default=None, help='e.g. "1-11,21,42" (default: the 13 development seeds)')
-    p.add_argument('--cases', default='A,A-ALINEA,A-ALINEA-fault,A-ALINEA-ovr20,A-ALINEA-ovr28',
+    p.add_argument('--cases', default='A,A-ALINEA,A-ALINEA-fault',
                    help='comma-separated subset of ' + ', '.join(CASES))
     p.add_argument('--workers', type=int, default=4)
     p.add_argument('--ref', default='A', help='reference case for the paired differences (default A, no control)')

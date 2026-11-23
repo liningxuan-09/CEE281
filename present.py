@@ -39,10 +39,9 @@ SURFACE = '#fcfcfb'      # chart background
 SERIES = ['#2a78d6', '#eb6834', '#1baf7a', '#6250d6']  # fixed categorical order
 ZONE = '#f2f1ec'         # shaded merge zone / demand window
 
-# Speed scale (km/h): congested traffic is dark red and stands out; free flow
-# fades to a pale gray-blue. Lightness changes monotonically, so the scale is
-# still readable in grayscale and for color-vision deficiencies.
-SPEED_STOPS = [(0.0, '#7f1d1d'), (0.35, '#d1462f'), (0.65, '#f0a46e'), (1.0, '#c3d3e6')]
+# Speed scale (km/h), the same in every figure and in the replay: dark red is slow,
+# yellow is about 80 km/h and green is free flow (the scale of the report figures).
+SPEED_STOPS = [(0.0, '#8b0000'), (0.35, '#e8452d'), (0.65, '#ffffbf'), (1.0, '#1a9850')]
 SPEED_MAX_KMH = 120.0
 
 DPI = 160
@@ -230,55 +229,60 @@ def _mark_merge(ax, c, km_axis='y'):
 # --------------------------------------------------------------------------
 # Individual figures
 # --------------------------------------------------------------------------
-def fig_trajectories(r, path):
-    """Time-space diagram of the mainline (plus the ramp lane when it is simulated)."""
-    plt = _plt()
+REPORT_FONT = {'font.family': 'serif', 'font.serif': ['Times New Roman', 'Liberation Serif', 'Nimbus Roman', 'TeX Gyre Termes', 'DejaVu Serif'],
+               'mathtext.fontset': 'stix', 'font.size': 11, 'axes.labelsize': 11, 'axes.titlesize': 11, 'xtick.labelsize': 11,
+               'ytick.labelsize': 11, 'axes.linewidth': .65, 'axes.edgecolor': 'black', 'axes.labelcolor': 'black', 'text.color': 'black',
+               'xtick.color': 'black', 'ytick.color': 'black', 'xtick.labelcolor': 'black', 'ytick.labelcolor': 'black',
+               'axes.spines.top': True, 'axes.spines.right': True, 'axes.grid': False,
+               'figure.facecolor': 'white', 'axes.facecolor': 'white', 'savefig.facecolor': 'white'}
+
+
+def trajectory_panel(ax, r, title):
+    """One time-space panel in the report style: whole road, 0-45 min, one line per mainline vehicle coloured
+    by speed, dashed lines at the acceleration lane, dotted line at the end of demand, delay and congested
+    time underneath. Returns nothing; the colour scale is _speed_cmap() on 0-120 km/h."""
     from matplotlib.collections import LineCollection
     from matplotlib.colors import Normalize
+    s, c = r['summary'], r['summary']['config']
+    seg, v = _segments([z for z in r['trajectories'] if z['t_s'] <= 2700], 0)
+    lc = LineCollection(seg, cmap=_speed_cmap(), norm=Normalize(0, SPEED_MAX_KMH), linewidths=.35, rasterized=True)
+    lc.set_array(v)
+    ax.add_collection(lc)
+    for y in ((c['merge_x'] - c['acc_length']) / 1000, c['merge_x'] / 1000):
+        ax.axhline(y, color='black', ls='--', lw=.65)
+    ax.axvline(c['demand_end'] / 60, color='black', ls=':', lw=.65)
+    ax.set(xlim=(0, 45), ylim=(0, c['road_end'] / 1000), xlabel='Time (min)')
+    ax.set_xticks([0, 15, 30, 45])
+    ax.set_yticks(np.arange(0, c['road_end'] / 1000 + 0.01, 0.5))
+    ax.set_title(title, loc='left', pad=10)
+    cong = s.get('congestion_duration_s')
+    ax.text(.5, -.34, f"Delay: {s['accumulated_delay_veh_s'] / 3600:.1f} veh h\nCongested: "
+            + (f'{cong / 60:.1f} min' if cong is not None else 'n/a'), transform=ax.transAxes, ha='center', va='top')
+
+
+def case_label(c):
+    """Short name of a run for a trajectory panel."""
+    if c.get('acc_share'):
+        return f"{100 * c['acc_share']:.0f}% ACC, " + ('ALINEA' if c.get('ramp_control') else 'unmetered')
+    return 'ALINEA, all human-driven' if c.get('ramp_control') else 'Baseline: 0% ACC'
+
+
+def fig_trajectories(r, path):
+    """Time-space diagram of the mainline in the report style (see trajectory_panel)."""
+    plt = _plt()
+    from matplotlib.colors import Normalize
     c = r['summary']['config']
-    m, (lo, hi), ramp_lane = geometry(c)
-    cmap, norm = _speed_cmap(), Normalize(0, SPEED_MAX_KMH)
-    if ramp_lane:
-        fig, (top, bottom) = plt.subplots(
-            2, 1, figsize=(11, 7.2), sharex=True, gridspec_kw=dict(height_ratios=[3, 1.15], hspace=0.12))
-        axes = ((top, 0), (bottom, 1))
-        note = 'flat dark lines on the ramp are vehicles waiting to merge'
-    else:
-        fig, top = plt.subplots(figsize=(11, 6.2))
-        bottom, axes = top, ((top, 0),)
-        note = ('ramp vehicles appear where they leave the acceleration lane (shaded); a dark band growing upstream is a queue'
-                if 'acc_length' in c else
-                'ramp vehicles appear where they merge (shaded merge zone); a dark band growing upstream is a queue'
-                if hi > lo else 'ramp vehicles appear at the merge point; a dark band growing upstream is a queue')
-    fig.subplots_adjust(left=0.07, right=0.9, top=0.87 if ramp_lane else 0.85, bottom=0.08 if ramp_lane else 0.1)
-    _header(fig, 'Vehicle trajectories',
-            f"One line per vehicle, colored by speed; {note}.\n"
-            f"Seed {c['seed']}, dt = {c['dt']} s; demand: {demand_label(c)}.")
-    for ax, lane in axes:
-        seg, v = _segments(r['trajectories'], lane)
-        lc = LineCollection(seg, cmap=cmap, norm=norm, linewidths=0.7 if lane == 0 else 0.9)
-        lc.set_array(v)
-        ax.add_collection(lc)
-        _mark_merge(ax, c)
-        ax.axvline(c['demand_end'] / 60, color=MUTED, lw=1, ls=(0, (4, 3)))
-        _cleared_marker(ax, r, label=ax is top)
-        ax.grid(axis='x', visible=False)
-    top.set_ylim(0, c['road_end'] / 1000)
-    top.set_ylabel('Mainline position (km)')
-    top.text(0.003, hi / 1000 + 0.03, 'acceleration lane' if 'acc_length' in c else 'merge zone' if ramp_lane else 'merge point', color='#1c5cab',
-             fontsize=8.5, transform=top.get_yaxis_transform())
-    top.text(c['demand_end'] / 60, c['road_end'] / 1000, 'demand ends  ', ha='right', va='top',
-             fontsize=8.5, color=MUTED)
-    if ramp_lane:
-        bottom.set_ylim(c['ramp_start'] / 1000, c['merge_end'] / 1000)
-        bottom.set_ylabel('Ramp (km)')
-    bottom.set_xlim(0, view_end(r))
-    bottom.set_xlabel('Simulation time (min)')
-    cax = fig.add_axes([0.915, 0.08 if ramp_lane else 0.1, 0.014, 0.79 if ramp_lane else 0.75])
-    cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
-    cb.set_label('Speed (km/h)', color=INK_2)
-    cb.outline.set_visible(False)
-    _save(fig, path)
+    with plt.rc_context(REPORT_FONT):
+        fig = plt.figure(figsize=(4.4, 3.8))
+        ax = fig.add_axes([.17, .31, .56, .49])
+        trajectory_panel(ax, r, case_label(c))
+        ax.set_ylabel('Position (km)')
+        fig.text(.17, .95, f"Seed {c['seed']} | trajectories | 0-45 min", ha='left', va='top')
+        cb = fig.colorbar(plt.cm.ScalarMappable(norm=Normalize(0, SPEED_MAX_KMH), cmap=_speed_cmap()), cax=fig.add_axes([.78, .31, .028, .49]))
+        cb.set_ticks([0, 30, 60, 90, 120])
+        cb.set_label('Speed (km/h)', labelpad=6)
+        fig.savefig(path, dpi=300)
+        plt.close(fig)
 
 
 def fig_speed_heatmap(r, path):
@@ -635,73 +639,6 @@ def acc_ids(r):
     return {z['id'] for z in r.get('trips', []) if z.get('type') == 'ACC'}
 
 
-def busiest_window(r, width_s=600.0):
-    """Start (s) of the width_s window inside the evaluation window in which the mainline is
-    slowest over the last 500 m before the end of the acceleration lane (30 s bins)."""
-    c = r['summary']['config']
-    m, t0, t1 = c['merge_x'], c['eval_start'], c['demand_end']
-    nb = int((t1 - t0) // 30)
-    sums, cnt = np.zeros(nb), np.zeros(nb)
-    for z in r['trajectories']:
-        if z['lane'] == 0 and m - 500 <= z['x_km'] * 1000 < m and t0 <= z['t_s'] < t1:
-            j = min(int((z['t_s'] - t0) // 30), nb - 1)
-            sums[j] += z['v_kmh']
-            cnt[j] += 1
-    mean = np.where(cnt > 0, sums / np.maximum(cnt, 1), SPEED_MAX_KMH)
-    k = max(1, int(width_s // 30))
-    scores = [mean[i:i + k].mean() for i in range(max(1, nb - k + 1))]
-    return t0 + 30.0 * int(np.argmin(scores))
-
-
-def fig_acc_trajectories(r, path):
-    """Ten minutes of mainline trajectories around the slowest period: by vehicle type, and by speed."""
-    plt = _plt()
-    from matplotlib.collections import LineCollection
-    from matplotlib.colors import Normalize
-    from matplotlib.lines import Line2D
-    c = r['summary']['config']
-    ids = acc_ids(r)
-    start = busiest_window(r)
-    rows = [z for z in r['trajectories'] if z['lane'] == 0 and start - 2 <= z['t_s'] <= start + 602]
-    fig, (top, bottom) = plt.subplots(2, 1, figsize=(11, 8.6), sharex=True, gridspec_kw=dict(hspace=0.1))
-    fig.subplots_adjust(left=0.07, right=0.9, top=0.87, bottom=0.07)
-    _header(fig, 'Trajectories by vehicle type',
-            f"Mainline, the 10 minutes with the slowest approach. Top: ACC (blue) and human-driven (orange) vehicles; "
-            f"bottom: the same lines colored by speed.\n"
-            f"Seed {c['seed']}, {100 * c['acc_share']:.0f}% ACC, dt = {c['dt']} s; demand: {demand_label(c)}.")
-    for flag, color in ((False, SERIES[1]), (True, SERIES[0])):
-        seg, _ = _segments([z for z in rows if (z['id'] in ids) == flag], 0)
-        top.add_collection(LineCollection(seg, colors=color, linewidths=0.8))
-    top.legend(handles=[Line2D([], [], color=SERIES[0], lw=1.6, label='ACC'),
-                        Line2D([], [], color=SERIES[1], lw=1.6, label='Human-driven')],
-               frameon=False, loc='lower right', fontsize=9, labelcolor=INK_2)
-    cmap, norm = _speed_cmap(), Normalize(0, SPEED_MAX_KMH)
-    seg, v = _segments(rows, 0)
-    lc = LineCollection(seg, cmap=cmap, norm=norm, linewidths=0.8)
-    lc.set_array(v)
-    bottom.add_collection(lc)
-    lo = max(0.0, (c['merge_x'] - c['acc_length'] - 700) / 1000)
-    hi = min(c['road_end'], c['merge_x'] + 300) / 1000
-    for ax in (top, bottom):
-        _mark_merge(ax, c)
-        ax.set_ylim(lo, hi)
-        ax.set_ylabel('Mainline position (km)')
-        ax.grid(axis='x', visible=False)
-    top.text(0.003, c['merge_x'] / 1000 + 0.02, 'acceleration lane', color='#1c5cab', fontsize=8.5,
-             transform=top.get_yaxis_transform())
-    bottom.set_xlim(start / 60, start / 60 + 10)
-    bottom.set_xlabel('Simulation time (min)')
-    pos = bottom.get_position()
-    cax = fig.add_axes([0.915, pos.y0, 0.014, pos.height])
-    cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax)
-    cb.set_label('Speed (km/h)', color=INK_2)
-    cb.outline.set_visible(False)
-    _save(fig, path)
-
-
-ACC_FIGURES = [('acc_trajectories.png', fig_acc_trajectories)]
-
-
 def _stability(c):
     """Left side of the linear string-stability criterion of Gunter et al. (2020); >= 0 is stable."""
     return c['acc_kp'] * c['acc_h'] ** 2 + 2 * c['acc_kv'] * c['acc_h'] - 2
@@ -726,7 +663,6 @@ def acc_main(r, embed):
 <section id="acc">
   <h2>ACC vehicles</h2>
   <div class="facts">{facts_html}</div>
-  <figure><img src="{embed('acc_trajectories.png')}" alt="Mainline trajectories by vehicle type and by speed"></figure>
 </section>"""
 
 
@@ -744,7 +680,7 @@ def acc_section(r):
              f"{_fmt(s['min_net_gap_hdv_follower_m'], 2)} / {_fmt(s['min_net_gap_acc_follower_m'], 2)} m"),
             ('Total trip delay, HDV / ACC',
              f"{s['total_delay_hdv_veh_s'] / 3600:.1f} / {s['total_delay_acc_veh_s'] / 3600:.1f} veh·h"),
-            ('Discharge at 1.6 km while the bottleneck is active', f"{_fmt(s.get('discharge_flow_active_veh_h'), 0)} veh/h"),
+            ('Discharge at 2.6 km while the bottleneck is active', f"{_fmt(s.get('discharge_flow_active_veh_h'), 0)} veh/h"),
             ('Disturbance ratio (speed SD 300–500 m upstream ÷ at the merge)', _fmt(s.get('disturbance_ratio'), 2))]
     return ('<h2>ACC vehicles</h2><div class="grid2"><div class="group"><h3>By vehicle type</h3><table>'
             + _rows_html(rows) + '</table></div></div>')
@@ -1103,8 +1039,7 @@ def fill_derived(result):
 def render(results, out, tables=True):
     """Export already computed runs. Call only after the user requests saving.
 
-    tables=False writes only the figures and the HTML report (used by replot.py
-    so a re-rendered old run does not duplicate its original CSV/JSON files)."""
+    tables=False writes only the figures and the HTML report."""
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     for result in results.values():
@@ -1130,9 +1065,6 @@ def render(results, out, tables=True):
         for filename, draw in TMC_FIGURES:
             draw(ramp, out / filename)
     acc_run = with_acc(summary['config'])
-    if acc_run:
-        for filename, draw in ACC_FIGURES:
-            draw(ramp, out / filename)
 
     def embed(name):
         return 'data:image/png;base64,' + base64.b64encode((out / name).read_bytes()).decode()
